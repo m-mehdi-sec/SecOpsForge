@@ -412,10 +412,11 @@ IT Security Developer Student
 
 Focused on cybersecurity, SOC operations, Blue Team security, threat detection, incident response, and security automation.
 
-[![GitHub](https://img.shields.io/badge/GitHub-24292F?style=for-the-badge&logo=github&logoColor=white)](https://github.com/m-mehdi-sec)
+[![GitHub](https://img.shields.io/badge/GitHub-24292F?style=flat-square&logo=github&logoColor=white)](https://github.com/m-mehdi-sec)
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammadmehdi-sec/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammadmehdi-sec/)
 
 ---
 
 SecOpsForge is an independent cybersecurity learning, research, and portfolio project. It is not affiliated with Microsoft and is not intended to replace production security operations platforms.
+
