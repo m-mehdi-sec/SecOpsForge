@@ -130,7 +130,73 @@ function Test-SecOpsForgeGraphConnection {
     }
 }
 
+function Get-SecOpsForgeIdentityInventory {
+    [CmdletBinding()]
+    param()
+
+    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        throw 'Microsoft Graph authentication module is not available.'
+    }
+
+    $context = Get-MgContext -ErrorAction Stop
+
+    if (-not $context -or -not $context.Account) {
+        throw 'Microsoft Graph is not connected.'
+    }
+
+    if (@($context.Scopes) -notcontains 'User.Read.All') {
+        throw 'Microsoft Graph permission User.Read.All is required.'
+    }
+
+    $users = @()
+    $uri = 'https://graph.microsoft.com/v1.0/users?$select=id,accountEnabled,userType,assignedLicenses&$top=100'
+
+    do {
+        $response = Invoke-MgGraphRequest `
+            -Method GET `
+            -Uri $uri `
+            -ErrorAction Stop
+
+        $users += @($response.value)
+        $uri = $response.'@odata.nextLink'
+    }
+    while ($uri)
+
+    $enabled = @($users | Where-Object {
+        $_.accountEnabled -eq $true
+    })
+
+    $disabled = @($users | Where-Object {
+        $_.accountEnabled -eq $false
+    })
+
+    $members = @($users | Where-Object {
+        $_.userType -eq 'Member'
+    })
+
+    $guests = @($users | Where-Object {
+        $_.userType -eq 'Guest'
+    })
+
+    $licensed = @($users | Where-Object {
+        @($_.assignedLicenses).Count -gt 0
+    })
+
+    [PSCustomObject]@{
+        SchemaVersion   = '1.0'
+        TotalUsers      = $users.Count
+        EnabledUsers    = $enabled.Count
+        DisabledUsers   = $disabled.Count
+        MemberUsers     = $members.Count
+        GuestUsers      = $guests.Count
+        LicensedUsers   = $licensed.Count
+        UnlicensedUsers = $users.Count - $licensed.Count
+        GeneratedAtUtc  = (Get-Date).ToUniversalTime().ToString('o')
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
-    Test-SecOpsForgeGraphConnection
+    Test-SecOpsForgeGraphConnection, `
+    Get-SecOpsForgeIdentityInventory
