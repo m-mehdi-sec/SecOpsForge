@@ -1,0 +1,9 @@
+{
+  "SchemaVersion": "1.0",
+  "IncidentId": 1,
+  "Title": "EICAR test file prevented",
+  "DeviceName": "W11-CLIENT",
+  "Status": "Resolved",
+  "Classification": "InformationalExpectedActivity",
+  "GeneratedAtUtc": "2026-10-26T20:54:35.9541371Z"
+}
