@@ -1,3 +1,4 @@
+
 name: PowerShell CI
 
 on:
@@ -22,13 +23,38 @@ jobs:
       - name: Install Pester 6
         shell: pwsh
         run: |
-          Install-Module Pester -RequiredVersion 6.2.0 -Scope CurrentUser -Force -AllowClobber
+          $ErrorActionPreference = 'Stop'
+
+          # Ensure PowerShell Gallery is registered
+          if (-not (Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue)) {
+              Register-PSRepository -Default
+          }
+
+          # Configure PowerShell Gallery
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+
+          # Install required Pester version
+          Install-Module Pester `
+            -RequiredVersion 6.2.0 `
+            -Repository PSGallery `
+            -Scope CurrentUser `
+            -Force `
+            -AllowClobber `
+            -ErrorAction Stop
+
+          # Verify installation
+          Get-Module Pester -ListAvailable |
+            Where-Object Version -EQ '6.2.0'
 
       - name: Run Pester tests
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+
           Import-Module Pester -RequiredVersion 6.2.0 -Force
+
           $result = Invoke-Pester -Path ./tests -Output Detailed -PassThru
+
           if ($result.FailedCount -gt 0 -or $result.TotalCount -eq 0) {
               exit 1
           }
