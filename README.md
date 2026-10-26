@@ -412,7 +412,7 @@ IT Security Developer Student
 
 Focused on cybersecurity, SOC operations, Blue Team security, threat detection, incident response, and security automation.
 
-[![GitHub](https://img.shields.io/badge/GitHub-24292F?style=flat-square&logo=github&logoColor=white)](https://github.com/m-mehdi-sec) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=https%3A%2F%2Fraw.githubusercontent.com%2Fm-mehdi-sec%2FSecOpsForge%2Fmain%2Fassets%2Flinkedin.svg)](https://www.linkedin.com/in/muhammadmehdi-sec/)
+[![GitHub](https://img.shields.io/badge/GitHub-24292F?style=flat-square&logo=github&logoColor=white)](https://github.com/m-mehdi-sec) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/m-mehdi-sec)
 
 ---
 
