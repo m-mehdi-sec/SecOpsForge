@@ -43,7 +43,11 @@ function New-SecOpsForgeIncidentReport {
         [string]$Status,
 
         [Parameter(Mandatory)]
-        [ValidateSet('TruePositive', 'InformationalExpectedActivity', 'FalsePositive')]
+        [ValidateSet(
+            'TruePositive',
+            'InformationalExpectedActivity',
+            'FalsePositive'
+        )]
         [string]$Classification,
 
         [Parameter(Mandatory)]
@@ -66,13 +70,67 @@ function New-SecOpsForgeIncidentReport {
     $parent = Split-Path -Parent $OutputPath
 
     if ($parent -and -not (Test-Path -LiteralPath $parent)) {
-        New-Item -ItemType Directory -Path $parent -Force -ErrorAction Stop |
-            Out-Null
+        New-Item -ItemType Directory `
+            -Path $parent `
+            -Force `
+            -ErrorAction Stop | Out-Null
     }
 
-    $json | Set-Content -LiteralPath $OutputPath -Encoding utf8 -ErrorAction Stop
+    $json | Set-Content `
+        -LiteralPath $OutputPath `
+        -Encoding utf8 `
+        -ErrorAction Stop
 
     Get-Item -LiteralPath $OutputPath
 }
 
-Export-ModuleMember -Function Get-SecOpsForgeEnvironment, New-SecOpsForgeIncidentReport
+function Test-SecOpsForgeGraphConnection {
+    [CmdletBinding()]
+    param()
+
+    $command = Get-Command Get-MgContext -ErrorAction SilentlyContinue
+
+    if (-not $command) {
+        return [PSCustomObject]@{
+            Connected    = $false
+            AuthType     = $null
+            HasReadScope = $false
+            Status       = 'Graph authentication module is not available'
+        }
+    }
+
+    try {
+        $context = Get-MgContext -ErrorAction Stop
+
+        if (-not $context -or -not $context.Account) {
+            return [PSCustomObject]@{
+                Connected    = $false
+                AuthType     = $null
+                HasReadScope = $false
+                Status       = 'Not connected'
+            }
+        }
+
+        $hasReadScope = @($context.Scopes) -contains 'User.Read'
+
+        return [PSCustomObject]@{
+            Connected    = $true
+            AuthType     = [string]$context.AuthType
+            HasReadScope = $hasReadScope
+            Status       = 'Connected'
+        }
+    }
+    catch {
+        return [PSCustomObject]@{
+            Connected    = $false
+            AuthType     = $null
+            HasReadScope = $false
+            Status       = 'Connection check failed'
+        }
+    }
+}
+
+Export-ModuleMember -Function `
+    Get-SecOpsForgeEnvironment, `
+    New-SecOpsForgeIncidentReport, `
+    Test-SecOpsForgeGraphConnection
