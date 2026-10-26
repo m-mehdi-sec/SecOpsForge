@@ -1,0 +1,34 @@
+name: PowerShell CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Pester Tests
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Pester 6
+        shell: pwsh
+        run: |
+          Install-Module Pester -RequiredVersion 6.2.0 -Scope CurrentUser -Force -AllowClobber
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          Import-Module Pester -RequiredVersion 6.2.0 -Force
+          $result = Invoke-Pester -Path ./tests -Output Detailed -PassThru
+          if ($result.FailedCount -gt 0 -or $result.TotalCount -eq 0) {
+              exit 1
+          }

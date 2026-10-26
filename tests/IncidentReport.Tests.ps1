@@ -19,11 +19,11 @@ Describe 'New-SecOpsForgeIncidentReport' {
         $report = Get-Content -LiteralPath $path -Raw |
             ConvertFrom-Json
 
-        $report.IncidentId | Should Be 1
-        $report.DeviceName | Should Be 'W11-CLIENT'
-        $report.Status | Should Be 'Resolved'
-        $report.Classification | Should Be 'InformationalExpectedActivity'
-        $report.SchemaVersion | Should Be '1.0'
+        $report.IncidentId | Should -Be 1
+        $report.DeviceName | Should -Be 'W11-CLIENT'
+        $report.Status | Should -Be 'Resolved'
+        $report.Classification | Should -Be 'InformationalExpectedActivity'
+        $report.SchemaVersion | Should -Be '1.0'
     }
 
     It 'Rejects an invalid incident status' {
@@ -45,7 +45,9 @@ Describe 'New-SecOpsForgeIncidentReport' {
             $errorRecord = $_
         }
 
-        $errorRecord | Should Not BeNullOrEmpty
-        (Test-Path -LiteralPath $path) | Should Be $false
+        $errorRecord | Should -Not -BeNullOrEmpty
+        (Test-Path -LiteralPath $path) | Should -Be $false
     }
 }
+
+
