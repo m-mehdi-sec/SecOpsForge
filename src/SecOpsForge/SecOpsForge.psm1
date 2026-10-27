@@ -294,9 +294,78 @@ function Get-SecOpsForgePrivilegedAccessInventory {
     }
 }
 
+function Get-SecOpsForgeIntuneDeviceInventory {
+    [CmdletBinding()]
+    param()
+
+    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        throw 'Microsoft Graph authentication module is not available.'
+    }
+
+    $context = Get-MgContext -ErrorAction Stop
+
+    if (-not $context -or -not $context.Account) {
+        throw 'Microsoft Graph is not connected.'
+    }
+
+    if (@($context.Scopes) -notcontains 'DeviceManagementManagedDevices.Read.All') {
+        throw 'Microsoft Graph permission DeviceManagementManagedDevices.Read.All is required.'
+    }
+
+    try {
+        $total = 0
+        $windows = 0
+        $compliant = 0
+        $noncompliant = 0
+        $other = 0
+
+        $uri = 'https://graph.microsoft.com/v1.0/deviceManagement/managedDevices?$select=operatingSystem,complianceState&$top=100'
+
+        do {
+            $response = Invoke-MgGraphRequest -Method GET -Uri $uri -ErrorAction Stop
+
+            if ($null -eq $response -or $null -eq $response.value) {
+                throw 'Invalid managed devices response.'
+            }
+
+            foreach ($device in $response.value) {
+                $total++
+
+                if ($device.operatingSystem -eq 'Windows') {
+                    $windows++
+                }
+
+                switch ([string]$device.complianceState) {
+                    'compliant' { $compliant++ }
+                    'noncompliant' { $noncompliant++ }
+                    default { $other++ }
+                }
+            }
+
+            $uri = $response.'@odata.nextLink'
+        }
+        while ($uri)
+
+        [PSCustomObject]@{
+            SchemaVersion       = '1.0'
+            TotalManagedDevices = $total
+            WindowsDevices      = $windows
+            CompliantDevices    = $compliant
+            NoncompliantDevices = $noncompliant
+            OtherCompliance     = $other
+            GeneratedAtUtc      = (Get-Date).ToUniversalTime().ToString('o')
+        }
+    }
+    catch {
+        throw 'Intune device inventory failed. No report was generated.'
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
     Test-SecOpsForgeGraphConnection, `
     Get-SecOpsForgeIdentityInventory, `
-    Get-SecOpsForgePrivilegedAccessInventory
+    Get-SecOpsForgePrivilegedAccessInventory, `
+    Get-SecOpsForgeIntuneDeviceInventory
+
