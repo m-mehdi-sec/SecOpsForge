@@ -361,11 +361,60 @@ function Get-SecOpsForgeIntuneDeviceInventory {
     }
 }
 
+function Get-SecOpsForgeIntunePolicyInventory {
+    [CmdletBinding()]
+    param()
+
+    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        throw 'Microsoft Graph authentication module is not available.'
+    }
+
+    $context = Get-MgContext -ErrorAction Stop
+
+    if (-not $context -or -not $context.Account) {
+        throw 'Microsoft Graph is not connected.'
+    }
+
+    if (@($context.Scopes) -notcontains 'DeviceManagementConfiguration.Read.All') {
+        throw 'Microsoft Graph permission DeviceManagementConfiguration.Read.All is required.'
+    }
+
+    try {
+        $total = 0
+        $uri = 'https://graph.microsoft.com/beta/deviceManagement/configurationPolicies?$select=id,platforms,technologies&$top=100'
+
+        do {
+            $response = Invoke-MgGraphRequest `
+                -Method GET `
+                -Uri $uri `
+                -ErrorAction Stop
+
+            if ($null -eq $response -or $null -eq $response.value) {
+                throw 'Invalid configuration policies response.'
+            }
+
+            $total += @($response.value).Count
+            $uri = $response.'@odata.nextLink'
+        }
+        while ($uri)
+
+        [PSCustomObject]@{
+            SchemaVersion              = '1.0'
+            ConfigurationPolicyCount   = $total
+            GeneratedAtUtc             = (Get-Date).ToUniversalTime().ToString('o')
+        }
+    }
+    catch {
+        throw 'Intune policy inventory failed. No report was generated.'
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
     Test-SecOpsForgeGraphConnection, `
     Get-SecOpsForgeIdentityInventory, `
     Get-SecOpsForgePrivilegedAccessInventory, `
-    Get-SecOpsForgeIntuneDeviceInventory
+    Get-SecOpsForgeIntuneDeviceInventory, `
+    Get-SecOpsForgeIntunePolicyInventory
 
