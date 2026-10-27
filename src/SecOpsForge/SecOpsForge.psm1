@@ -66,7 +66,6 @@ function New-SecOpsForgeIncidentReport {
     }
 
     $json = $report | ConvertTo-Json -Depth 5
-
     $parent = Split-Path -Parent $OutputPath
 
     if ($parent -and -not (Test-Path -LiteralPath $parent)) {
@@ -111,17 +110,15 @@ function Test-SecOpsForgeGraphConnection {
             }
         }
 
-        $hasReadScope = @($context.Scopes) -contains 'User.Read'
-
-        return [PSCustomObject]@{
+        [PSCustomObject]@{
             Connected    = $true
             AuthType     = [string]$context.AuthType
-            HasReadScope = $hasReadScope
+            HasReadScope = @($context.Scopes) -contains 'User.Read'
             Status       = 'Connected'
         }
     }
     catch {
-        return [PSCustomObject]@{
+        [PSCustomObject]@{
             Connected    = $false
             AuthType     = $null
             HasReadScope = $false
@@ -195,8 +192,111 @@ function Get-SecOpsForgeIdentityInventory {
     }
 }
 
+function Get-SecOpsForgePrivilegedAccessInventory {
+    [CmdletBinding()]
+    param()
+
+    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        throw 'Microsoft Graph authentication module is not available.'
+    }
+
+    $context = Get-MgContext -ErrorAction Stop
+
+    if (-not $context -or -not $context.Account) {
+        throw 'Microsoft Graph is not connected.'
+    }
+
+    if (@($context.Scopes) -notcontains 'RoleManagement.Read.Directory') {
+        throw 'Microsoft Graph permission RoleManagement.Read.Directory is required.'
+    }
+
+    try {
+        $assignments = @()
+        $uri = 'https://graph.microsoft.com/v1.0/roleManagement/directory/roleAssignments'
+
+        do {
+            $response = Invoke-MgGraphRequest `
+                -Method GET `
+                -Uri $uri `
+                -ErrorAction Stop
+
+            if ($null -eq $response -or $null -eq $response.value) {
+                throw 'Invalid role assignments response.'
+            }
+
+            $assignments += @($response.value)
+            $uri = $response.'@odata.nextLink'
+        }
+        while ($uri)
+
+        $roles = @()
+        $uri = 'https://graph.microsoft.com/v1.0/roleManagement/directory/roleDefinitions'
+
+        do {
+            $response = Invoke-MgGraphRequest `
+                -Method GET `
+                -Uri $uri `
+                -ErrorAction Stop
+
+            if ($null -eq $response -or $null -eq $response.value) {
+                throw 'Invalid role definitions response.'
+            }
+
+            $roles += @($response.value)
+            $uri = $response.'@odata.nextLink'
+        }
+        while ($uri)
+
+        $globalAdminTemplateId = '62e90394-69f5-4237-9190-012177145e10'
+
+        $globalAdminRoleIds = @(
+            $roles |
+                Where-Object {
+                    $_.templateId -eq $globalAdminTemplateId
+                } |
+                ForEach-Object { $_.id }
+        )
+
+        if ($globalAdminRoleIds.Count -eq 0) {
+            throw 'Global Administrator role definition was not found.'
+        }
+
+        $globalAdminAssignments = @(
+            $assignments | Where-Object {
+                $_.roleDefinitionId -in $globalAdminRoleIds
+            }
+        )
+
+        $otherAssignments = @(
+            $assignments | Where-Object {
+                $_.roleDefinitionId -notin $globalAdminRoleIds
+            }
+        )
+
+        $uniquePrincipals = @(
+            $assignments |
+                ForEach-Object { $_.principalId } |
+                Where-Object { $_ } |
+                Sort-Object -Unique
+        )
+
+        [PSCustomObject]@{
+            SchemaVersion              = '1.0'
+            TotalRoleAssignments       = $assignments.Count
+            GlobalAdminAssignments     = $globalAdminAssignments.Count
+            OtherRoleAssignments       = $otherAssignments.Count
+            UniquePrivilegedPrincipals = $uniquePrincipals.Count
+            GeneratedAtUtc             = (Get-Date).ToUniversalTime().ToString('o')
+        }
+    }
+    catch {
+        throw 'Privileged access inventory failed. No report was generated.'
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
     Test-SecOpsForgeGraphConnection, `
-    Get-SecOpsForgeIdentityInventory
+    Get-SecOpsForgeIdentityInventory, `
+    Get-SecOpsForgePrivilegedAccessInventory
