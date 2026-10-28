@@ -1,0 +1,4 @@
+
+# Local module backups
+*.psm1.bak
+*.psm1.*-backup
