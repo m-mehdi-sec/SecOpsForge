@@ -540,67 +540,156 @@ function Get-SecOpsForgeSecurityAssessment {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [psobject]$Report
     )
 
-    if (-not $Report.Identity -or
-        -not $Report.PrivilegedAccess -or
-        -not $Report.IntuneDevices -or
-        -not $Report.IntunePolicies -or
-        -not $Report.DefenderIncidents) {
-        throw 'Security posture report is incomplete.'
+    $requiredSections = @(
+        'Identity',
+        'PrivilegedAccess',
+        'IntuneDevices',
+        'IntunePolicies',
+        'DefenderIncidents'
+    )
+
+    foreach ($sectionName in $requiredSections) {
+        $sectionProperty = $Report.PSObject.Properties[$sectionName]
+
+        if ($null -eq $sectionProperty -or $null -eq $sectionProperty.Value) {
+            throw 'Security posture report is incomplete.'
+        }
     }
 
-    $findings = [System.Collections.Generic.List[object]]::new()
-
-    if ($Report.DefenderIncidents.ActiveIncidents -gt 0) {
-        $findings.Add([PSCustomObject]@{
+    # Indicators are heuristics, not proof of a security compromise.
+    $checks = @(
+        [PSCustomObject]@{
             RuleId = 'SEC-001'
+            Section = 'DefenderIncidents'
+            Metric = 'ActiveIncidents'
+            Operator = 'GreaterThan'
+            Threshold = 0
             Severity = 'High'
             Category = 'Defender'
             Title = 'Active security incidents require review'
-            Recommendation = 'Review active incidents in Microsoft Defender.'
-        })
-    }
-
-    if ($Report.IntuneDevices.NoncompliantDevices -gt 0) {
-        $findings.Add([PSCustomObject]@{
+            Reason = 'One or more Defender incidents are currently marked active.'
+            Recommendation = 'Triage active incidents in Microsoft Defender and verify their status.'
+            Verification = 'Review the active incident list and confirm each incident disposition.'
+        }
+        [PSCustomObject]@{
             RuleId = 'SEC-002'
+            Section = 'IntuneDevices'
+            Metric = 'NoncompliantDevices'
+            Operator = 'GreaterThan'
+            Threshold = 0
             Severity = 'High'
             Category = 'Intune'
             Title = 'Noncompliant managed devices detected'
-            Recommendation = 'Investigate device compliance failures.'
-        })
-    }
-
-    if ($Report.IntunePolicies.ConfigurationPolicyCount -eq 0) {
-        $findings.Add([PSCustomObject]@{
+            Reason = 'One or more managed devices are reported as noncompliant.'
+            Recommendation = 'Investigate compliance failures and confirm device remediation.'
+            Verification = 'Review device compliance status in Intune.'
+        }
+        [PSCustomObject]@{
             RuleId = 'SEC-003'
+            Section = 'IntunePolicies'
+            Metric = 'ConfigurationPolicyCount'
+            Operator = 'Equals'
+            Threshold = 0
             Severity = 'Medium'
             Category = 'Intune'
             Title = 'No modern configuration policies detected'
-            Recommendation = 'Review Intune configuration policy coverage.'
-        })
-    }
-
-    if ($Report.PrivilegedAccess.GlobalAdminAssignments -gt 2) {
-        $findings.Add([PSCustomObject]@{
+            Reason = 'No policies were returned by the modern configurationPolicies endpoint; other policy types may still exist.'
+            Recommendation = 'Review Intune configuration coverage, including legacy and other policy types.'
+            Verification = 'Confirm applicable policy types and assignments in Intune.'
+        }
+        [PSCustomObject]@{
             RuleId = 'SEC-004'
+            Section = 'PrivilegedAccess'
+            Metric = 'GlobalAdminAssignments'
+            Operator = 'GreaterThan'
+            Threshold = 2
             Severity = 'Medium'
             Category = 'Identity'
             Title = 'Global Administrator assignments require review'
-            Recommendation = 'Review privileged access and least privilege.'
-        })
+            Reason = 'More than two Global Administrator role assignments were detected; this threshold is a review heuristic.'
+            Recommendation = 'Review privileged access and least privilege requirements.'
+            Verification = 'Verify assigned principals and the business need for each assignment.'
+        }
+    )
+
+    $findings = [System.Collections.Generic.List[object]]::new()
+    $unknownChecks = [System.Collections.Generic.List[object]]::new()
+
+    foreach ($check in $checks) {
+        $section = $Report.PSObject.Properties[$check.Section].Value
+        $metricProperty = $section.PSObject.Properties[$check.Metric]
+        $value = if ($null -ne $metricProperty) { $metricProperty.Value } else { $null }
+
+        # Inventory counters must be non-negative whole numbers.
+        # Do not silently interpret missing or malformed data as zero.
+        $isWholeNumber = (
+            $value -is [int] -or
+            $value -is [long] -or
+            $value -is [uint32]
+        )
+
+        if (-not $isWholeNumber -or $value -lt 0) {
+            $unknownChecks.Add([PSCustomObject]@{
+                RuleId = $check.RuleId
+                Category = $check.Category
+                Metric = $check.Metric
+                Reason = 'Required inventory counter is missing or invalid.'
+                Recommendation = 'Verify the inventory data before assessing this rule.'
+            })
+            continue
+        }
+
+        $triggered = switch ($check.Operator) {
+            'GreaterThan' { $value -gt $check.Threshold }
+            'Equals' { $value -eq $check.Threshold }
+            default { throw 'Unsupported assessment operator.' }
+        }
+
+        if ($triggered) {
+            $findings.Add([PSCustomObject]@{
+                RuleId = $check.RuleId
+                Severity = $check.Severity
+                Category = $check.Category
+                Title = $check.Title
+                Reason = $check.Reason
+                Evidence = "$($check.Metric): $value"
+                Recommendation = $check.Recommendation
+                Verification = $check.Verification
+            })
+        }
+    }
+
+    $assessmentStatus = if ($findings.Count -gt 0 -and $unknownChecks.Count -gt 0) {
+        'ReviewRequiredWithDataGaps'
+    }
+    elseif ($findings.Count -gt 0) {
+        'ReviewRequired'
+    }
+    elseif ($unknownChecks.Count -gt 0) {
+        'InsufficientData'
+    }
+    else {
+        'NoIndicatorsDetected'
     }
 
     [PSCustomObject]@{
         SchemaVersion = '1.0'
         AssessmentType = 'SecurityPostureAssessment'
+        AssessmentStatus = $assessmentStatus
         FindingCount = $findings.Count
         Findings = @($findings.ToArray())
+        UnknownCount = $unknownChecks.Count
+        UnknownChecks = @($unknownChecks.ToArray())
+        ChecksEvaluated = $checks.Count - $unknownChecks.Count
+        ChecksTotal = $checks.Count
         GeneratedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
     }
 }
+
 
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
