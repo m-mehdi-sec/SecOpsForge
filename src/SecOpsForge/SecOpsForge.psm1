@@ -409,6 +409,85 @@ function Get-SecOpsForgeIntunePolicyInventory {
     }
 }
 
+function Get-SecOpsForgeDefenderIncidentInventory {
+    [CmdletBinding()]
+    param()
+
+    if (-not (Get-Command Invoke-MgGraphRequest -ErrorAction SilentlyContinue)) {
+        throw 'Microsoft Graph authentication module is not available.'
+    }
+
+    $context = Get-MgContext -ErrorAction Stop
+
+    if (-not $context -or -not $context.Account) {
+        throw 'Microsoft Graph is not connected.'
+    }
+
+    if (@($context.Scopes) -notcontains 'SecurityIncident.Read.All') {
+        throw 'Microsoft Graph permission SecurityIncident.Read.All is required.'
+    }
+
+    try {
+        $total = 0
+        $active = 0
+        $resolved = 0
+        $high = 0
+        $medium = 0
+        $low = 0
+        $informational = 0
+        $otherSeverity = 0
+
+        $uri = 'https://graph.microsoft.com/v1.0/security/incidents?$top=50'
+
+        do {
+            $response = Invoke-MgGraphRequest `
+                -Method GET `
+                -Uri $uri `
+                -ErrorAction Stop
+
+            if ($null -eq $response -or $null -eq $response.value) {
+                throw 'Invalid Defender incidents response.'
+            }
+
+            foreach ($incident in $response.value) {
+                $total++
+
+                switch ([string]$incident.status) {
+                    'resolved' { $resolved++ }
+                    'active' { $active++ }
+                }
+
+                switch ([string]$incident.severity) {
+                    'high' { $high++ }
+                    'medium' { $medium++ }
+                    'low' { $low++ }
+                    'informational' { $informational++ }
+                    default { $otherSeverity++ }
+                }
+            }
+
+            $uri = $response.'@odata.nextLink'
+        }
+        while ($uri)
+
+        [PSCustomObject]@{
+            SchemaVersion          = '1.0'
+            TotalIncidents         = $total
+            ActiveIncidents        = $active
+            ResolvedIncidents      = $resolved
+            HighSeverity           = $high
+            MediumSeverity         = $medium
+            LowSeverity            = $low
+            InformationalSeverity  = $informational
+            OtherSeverity          = $otherSeverity
+            GeneratedAtUtc         = (Get-Date).ToUniversalTime().ToString('o')
+        }
+    }
+    catch {
+        throw 'Defender incident inventory failed. No report was generated.'
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
@@ -416,5 +495,6 @@ Export-ModuleMember -Function `
     Get-SecOpsForgeIdentityInventory, `
     Get-SecOpsForgePrivilegedAccessInventory, `
     Get-SecOpsForgeIntuneDeviceInventory, `
-    Get-SecOpsForgeIntunePolicyInventory
+    Get-SecOpsForgeIntunePolicyInventory, `
+    Get-SecOpsForgeDefenderIncidentInventory
 
