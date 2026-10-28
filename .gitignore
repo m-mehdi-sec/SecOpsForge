@@ -1,4 +1,30 @@
-
 # Local module backups
 *.psm1.bak
 *.psm1.*-backup
+
+# Local editor / operating system artifacts
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Private SecOpsForge output and temporary artifacts
+SecOpsForge-Private-Reports/
+**/security-posture.json
+**/security-assessment.json
+**/security-report.html
+**/security-report.html.*
+**/*-private.json
+**/*.bak
+**/*.tmp
+
+# Authentication and credentials (do not commit any secrets)
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Private local branding assets; publish only reviewed, licensed assets
+BrandAssets/

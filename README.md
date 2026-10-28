@@ -12,7 +12,7 @@ The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender 
 
 SecOpsForge is developed as a technical cybersecurity portfolio project, combining practical security operations with reusable code, automated testing, and structured engineering workflows.
 
-**Project Status:** Active Development
+**Project Status:** Active Development — local Pester suite: 89 passed (2026-10-28); documentation and release review in progress
 
 ---
 
@@ -173,7 +173,7 @@ SecOpsForge includes a reusable PowerShell module located at:
 
 `src/SecOpsForge/SecOpsForge.psm1`
 
-The module provides the foundation for future security operations automation.
+The module implements ten exported commands for read-only Microsoft security inventory, assessment, incident report generation, and environment validation. See [Architecture](docs/architecture.md) and [Lab documentation](docs/lab-documentation.md).
 
 ### Get-SecOpsForgeEnvironment
 
@@ -222,7 +222,7 @@ New-SecOpsForgeIncidentReport `
     -OutputPath "./samples/incident-report.json"
 ```
 
-The current function generates reports from provided parameters. Direct retrieval of security incidents through Microsoft APIs is not yet implemented.
+`New-SecOpsForgeIncidentReport` generates a report from supplied parameters. Separately, `Get-SecOpsForgeDefenderIncidentInventory` supports read-only incident inventory through Microsoft Graph; the two commands have different purposes.
 
 ### Incident Report Classification
 
@@ -239,6 +239,39 @@ Supported incident status values:
 - `Resolved`
 
 The function validates input parameters and generates UTF-8 JSON output.
+
+## Read-only Security Review and Offline HTML Report
+
+SecOpsForge includes the following verified module commands:
+
+| Command | Purpose |
+|---|---|
+| `Get-SecOpsForgeEnvironment` | Checks development prerequisites |
+| `Test-SecOpsForgeGraphConnection` | Checks Microsoft Graph connectivity |
+| `Get-SecOpsForgeIdentityInventory` | Read-only identity inventory |
+| `Get-SecOpsForgePrivilegedAccessInventory` | Read-only privileged-access inventory |
+| `Get-SecOpsForgeIntuneDeviceInventory` | Read-only Intune device inventory |
+| `Get-SecOpsForgeIntunePolicyInventory` | Read-only Intune policy inventory |
+| `Get-SecOpsForgeDefenderIncidentInventory` | Read-only Defender incident inventory |
+| `New-SecOpsForgeSecurityPostureReport` | Builds a structured posture report |
+| `Get-SecOpsForgeSecurityAssessment` | Evaluates risk indicators and data quality |
+| `New-SecOpsForgeIncidentReport` | Creates a report from supplied incident fields |
+
+The orchestrator `scripts/Invoke-SecOpsForgeSecurityReview.ps1` has been used successfully for a read-only lab review. Its outputs, `security-posture.json` and `security-assessment.json`, are stored in a private folder outside the repository. A previous review returned zero findings; **zero findings is not a guarantee of security**, and data completeness must be considered.
+
+`scripts/New-SecOpsForgeHtmlReport.ps1` creates a self-contained, offline HTML report from those two JSON files. It escapes report content, uses a restrictive Content Security Policy, and embeds locally validated SVG branding assets. Brand assets are kept outside the repository. Missing metrics are shown as *Not reported* rather than silently interpreted as zero.
+
+Example, using previously generated private JSON files:
+
+```powershell
+$private = Join-Path $HOME 'SecOpsForge-Private-Reports'
+& ./scripts/New-SecOpsForgeHtmlReport.ps1 `
+    -PosturePath (Join-Path $private 'security-posture.json') `
+    -AssessmentPath (Join-Path $private 'security-assessment.json') `
+    -OutputPath (Join-Path $private 'security-report.html')
+```
+
+**Do not commit tenant exports, access tokens, raw incident details, or private HTML reports.** See [Security model](docs/security-model.md) and [Testing](docs/testing.md).
 
 ## Repository Structure
 
@@ -264,7 +297,7 @@ SecOpsForge/
 
 The repository is organized to support modular automation, test coverage, security evidence, technical documentation, and future expansion.
 
-Some directories are reserved for planned functionality.
+See the current repository tree for the authoritative file inventory. Some directories are reserved for planned functionality. Detailed documentation is available under `docs/`.
 
 ## Automated Testing
 
@@ -272,35 +305,18 @@ SecOpsForge uses **Pester 6.2.0** to validate PowerShell functionality.
 
 ### Current Test Coverage
 
-| Test | Purpose |
-|---|---|
-| Returns four tools | Validates environment tool enumeration |
-| Returns expected tool names | Verifies expected development dependencies |
-| Returns boolean installation status | Validates installation status types |
-| Creates a valid JSON incident report | Verifies incident report generation |
-| Rejects an invalid incident status | Validates parameter restrictions |
+The Pester suite covers environment checks, Microsoft Graph connection handling, identity and privileged-access inventories, Intune device and policy inventories, Defender incident inventory, security posture and assessment, HTML reporting, dashboard presentation, and SVG branding safety.
 
 ### Run Tests Locally
 
-Requirements:
-
-- PowerShell 7 or later
-- Pester 6.2.0
+Requirements: PowerShell 7 and Pester 6.2.0 (as configured in this project's CI workflow).
 
 ```powershell
 Import-Module Pester -RequiredVersion 6.2.0 -Force
-
-Invoke-Pester -Path ./tests -Output Detailed
+Invoke-Pester -Path ./tests -Output Normal
 ```
 
-**Latest locally verified result:**
-
-```text
-Tests Passed: 5
-Tests Failed: 0
-```
-
-Automated testing will be expanded as additional functionality is implemented.
+**Latest locally verified result (2026-10-28):** 89 passed, 0 failed. This is a local result; it is not a claim that the newly added tests have already passed in GitHub Actions.
 
 ## Continuous Integration
 
@@ -339,10 +355,10 @@ SecOpsForge follows an eight-phase development structure with four planned relea
 | 2 | Identity security and access controls | Implemented baseline |
 | 3 | Intune device management and compliance | Implemented baseline |
 | 4 | Defender endpoint protection and detection | Implemented baseline |
-| 5 | SOC investigations and incident reporting | In progress |
-| 6 | PowerShell security automation | In progress |
-| 7 | Automated testing and CI | Initial implementation complete |
-| 8 | Documentation, final validation, and release preparation | Planned |
+| 5 | SOC investigations and incident reporting | EICAR investigation completed; reporting development ongoing |
+| 6 | PowerShell security automation | Ten exported commands; read-only security review implemented |
+| 7 | Automated testing and CI | 89 tests passed locally; CI validation pending for new files |
+| 8 | Documentation, final validation, and release preparation | In progress |
 
 ### Planned GitHub Releases
 
@@ -389,8 +405,8 @@ SecOpsForge follows defensive security engineering principles.
 
 The following capabilities are being considered for future development:
 
-- Microsoft Graph API integration for authorized security data retrieval.
-- Automated collection of Microsoft Defender incident information.
+- Extend existing read-only Microsoft Graph inventory coverage where authorized.
+- Expand existing read-only Defender incident inventory and investigation workflows.
 - Extended endpoint security posture assessment.
 - Structured incident investigation reports.
 - Reusable security operations scripts and runbooks.
@@ -417,4 +433,3 @@ Focused on cybersecurity, SOC operations, Blue Team security, threat detection, 
 ---
 
 SecOpsForge is an independent cybersecurity learning, research, and portfolio project. It is not affiliated with Microsoft and is not intended to replace production security operations platforms.
-
