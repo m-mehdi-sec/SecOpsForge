@@ -536,6 +536,72 @@ function New-SecOpsForgeSecurityPostureReport {
     }
 }
 
+function Get-SecOpsForgeSecurityAssessment {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [psobject]$Report
+    )
+
+    if (-not $Report.Identity -or
+        -not $Report.PrivilegedAccess -or
+        -not $Report.IntuneDevices -or
+        -not $Report.IntunePolicies -or
+        -not $Report.DefenderIncidents) {
+        throw 'Security posture report is incomplete.'
+    }
+
+    $findings = [System.Collections.Generic.List[object]]::new()
+
+    if ($Report.DefenderIncidents.ActiveIncidents -gt 0) {
+        $findings.Add([PSCustomObject]@{
+            RuleId = 'SEC-001'
+            Severity = 'High'
+            Category = 'Defender'
+            Title = 'Active security incidents require review'
+            Recommendation = 'Review active incidents in Microsoft Defender.'
+        })
+    }
+
+    if ($Report.IntuneDevices.NoncompliantDevices -gt 0) {
+        $findings.Add([PSCustomObject]@{
+            RuleId = 'SEC-002'
+            Severity = 'High'
+            Category = 'Intune'
+            Title = 'Noncompliant managed devices detected'
+            Recommendation = 'Investigate device compliance failures.'
+        })
+    }
+
+    if ($Report.IntunePolicies.ConfigurationPolicyCount -eq 0) {
+        $findings.Add([PSCustomObject]@{
+            RuleId = 'SEC-003'
+            Severity = 'Medium'
+            Category = 'Intune'
+            Title = 'No modern configuration policies detected'
+            Recommendation = 'Review Intune configuration policy coverage.'
+        })
+    }
+
+    if ($Report.PrivilegedAccess.GlobalAdminAssignments -gt 2) {
+        $findings.Add([PSCustomObject]@{
+            RuleId = 'SEC-004'
+            Severity = 'Medium'
+            Category = 'Identity'
+            Title = 'Global Administrator assignments require review'
+            Recommendation = 'Review privileged access and least privilege.'
+        })
+    }
+
+    [PSCustomObject]@{
+        SchemaVersion = '1.0'
+        AssessmentType = 'SecurityPostureAssessment'
+        FindingCount = $findings.Count
+        Findings = @($findings.ToArray())
+        GeneratedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
@@ -545,5 +611,6 @@ Export-ModuleMember -Function `
     Get-SecOpsForgeIntuneDeviceInventory, `
     Get-SecOpsForgeIntunePolicyInventory, `
     Get-SecOpsForgeDefenderIncidentInventory, `
-    New-SecOpsForgeSecurityPostureReport
+    New-SecOpsForgeSecurityPostureReport, `
+    Get-SecOpsForgeSecurityAssessment
 
