@@ -488,6 +488,54 @@ function Get-SecOpsForgeDefenderIncidentInventory {
     }
 }
 
+function New-SecOpsForgeSecurityPostureReport {
+    [CmdletBinding()]
+    param(
+        [string]$OutputPath
+    )
+
+    try {
+        $identity = Get-SecOpsForgeIdentityInventory
+        $privileged = Get-SecOpsForgePrivilegedAccessInventory
+        $devices = Get-SecOpsForgeIntuneDeviceInventory
+        $policies = Get-SecOpsForgeIntunePolicyInventory
+        $incidents = Get-SecOpsForgeDefenderIncidentInventory
+
+        $report = [PSCustomObject]@{
+            SchemaVersion = '1.0'
+            ReportType = 'SecurityPosture'
+            GeneratedAtUtc = (Get-Date).ToUniversalTime().ToString('o')
+            Identity = $identity
+            PrivilegedAccess = $privileged
+            IntuneDevices = $devices
+            IntunePolicies = $policies
+            DefenderIncidents = $incidents
+        }
+
+        if ($OutputPath) {
+            $json = $report | ConvertTo-Json -Depth 10
+            $fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
+
+            $directory = Split-Path -Parent $fullPath
+
+            if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
+                throw 'Output directory does not exist.'
+            }
+
+            [System.IO.File]::WriteAllText(
+                $fullPath,
+                $json,
+                [System.Text.UTF8Encoding]::new($false)
+            )
+        }
+
+        return $report
+    }
+    catch {
+        throw 'Security posture report failed. No complete report was generated.'
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
@@ -496,5 +544,6 @@ Export-ModuleMember -Function `
     Get-SecOpsForgePrivilegedAccessInventory, `
     Get-SecOpsForgeIntuneDeviceInventory, `
     Get-SecOpsForgeIntunePolicyInventory, `
-    Get-SecOpsForgeDefenderIncidentInventory
+    Get-SecOpsForgeDefenderIncidentInventory, `
+    New-SecOpsForgeSecurityPostureReport
 
