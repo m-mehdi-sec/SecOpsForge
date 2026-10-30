@@ -12,7 +12,7 @@ The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender 
 
 SecOpsForge is developed as a technical cybersecurity portfolio project, combining practical security operations with reusable code, automated testing, and structured engineering workflows.
 
-**Project Status:** Active Development — local Pester suite: 89 passed (2026-10-28); documentation and release review in progress
+**Project Status:** Active Development — 102 Pester tests passed locally (2026-10-30); GitHub Actions validated; v0.2.0 release review in progress
 
 ---
 
@@ -173,7 +173,7 @@ SecOpsForge includes a reusable PowerShell module located at:
 
 `src/SecOpsForge/SecOpsForge.psm1`
 
-The module implements ten exported commands for read-only Microsoft security inventory, assessment, incident report generation, and environment validation. See [Architecture](docs/architecture.md) and [Lab documentation](docs/lab-documentation.md).
+The module implements eleven exported commands for read-only Microsoft security inventory, assessment, incident report generation, and environment validation. See [Architecture](docs/architecture.md) and [Lab documentation](docs/lab-documentation.md).
 
 ### Get-SecOpsForgeEnvironment
 
@@ -253,6 +253,7 @@ SecOpsForge includes the following verified module commands:
 | `Get-SecOpsForgeIntuneDeviceInventory` | Read-only Intune device inventory |
 | `Get-SecOpsForgeIntunePolicyInventory` | Read-only Intune policy inventory |
 | `Get-SecOpsForgeDefenderIncidentInventory` | Read-only Defender incident inventory |
+| `Get-SecOpsForgeDefenderDeviceInventory` | Read-only Defender device inventory |
 | `New-SecOpsForgeSecurityPostureReport` | Builds a structured posture report |
 | `Get-SecOpsForgeSecurityAssessment` | Evaluates risk indicators and data quality |
 | `New-SecOpsForgeIncidentReport` | Creates a report from supplied incident fields |
@@ -273,6 +274,24 @@ $private = Join-Path $HOME 'SecOpsForge-Private-Reports'
 
 **Do not commit tenant exports, access tokens, raw incident details, or private HTML reports.** See [Security model](docs/security-model.md) and [Testing](docs/testing.md).
 
+
+### Defender Device Inventory
+
+SecOpsForge supports read-only Microsoft Defender device inventory
+through a dedicated Microsoft Entra application with the
+WindowsDefenderATP Machine.Read.All application permission.
+
+When a valid Defender access token is supplied, the security review
+includes a sixth inventory area: Defender Devices.
+
+The offline HTML dashboard displays the total device count without
+exposing individual device names.
+
+The existing five-area reporting workflow remains supported when
+no Defender token is provided.
+
+The Defender inventory is informational and does not automatically
+create security findings.
 ## Repository Structure
 
 ```text
@@ -290,8 +309,7 @@ SecOpsForge/
 │   └── SecOpsForge/
 │       └── SecOpsForge.psm1
 ├── tests/
-│   ├── Environment.Tests.ps1
-│   └── IncidentReport.Tests.ps1
+│   └── *.Tests.ps1
 └── README.md
 ```
 
@@ -305,7 +323,7 @@ SecOpsForge uses **Pester 6.2.0** to validate PowerShell functionality.
 
 ### Current Test Coverage
 
-The Pester suite covers environment checks, Microsoft Graph connection handling, identity and privileged-access inventories, Intune device and policy inventories, Defender incident inventory, security posture and assessment, HTML reporting, dashboard presentation, and SVG branding safety.
+The Pester suite covers Defender device inventory and HTML integration, environment checks, Microsoft Graph connection handling, identity and privileged-access inventories, Intune device and policy inventories, Defender incident inventory, security posture and assessment, HTML reporting, dashboard presentation, and SVG branding safety.
 
 ### Run Tests Locally
 
@@ -316,7 +334,7 @@ Import-Module Pester -RequiredVersion 6.2.0 -Force
 Invoke-Pester -Path ./tests -Output Normal
 ```
 
-**Latest locally verified result (2026-10-28):** 89 passed, 0 failed. This is a local result; it is not a claim that the newly added tests have already passed in GitHub Actions.
+**Latest locally verified result (2026-10-30):** 102 passed, 0 failed. GitHub Actions also completed successfully after publication of the Defender integration.
 
 ## Continuous Integration
 
@@ -341,7 +359,7 @@ The pipeline:
 3. Executes the automated test suite using PowerShell.
 4. Fails the workflow if tests fail or no tests are discovered.
 
-The initial GitHub Actions workflow completed successfully.
+GitHub Actions completed successfully following the Defender device inventory integration.
 
 [View GitHub Actions](https://github.com/m-mehdi-sec/SecOpsForge/actions)
 
@@ -356,8 +374,8 @@ SecOpsForge follows an eight-phase development structure with four planned relea
 | 3 | Intune device management and compliance | Implemented baseline |
 | 4 | Defender endpoint protection and detection | Implemented baseline |
 | 5 | SOC investigations and incident reporting | EICAR investigation completed; reporting development ongoing |
-| 6 | PowerShell security automation | Ten exported commands; read-only security review implemented |
-| 7 | Automated testing and CI | 89 tests passed locally; CI validation pending for new files |
+| 6 | PowerShell security automation | Eleven exported commands; read-only security review and Defender device inventory implemented |
+| 7 | Automated testing and CI | 102 tests passed locally; GitHub Actions successful |
 | 8 | Documentation, final validation, and release preparation | In progress |
 
 ### Planned GitHub Releases
