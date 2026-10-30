@@ -13,7 +13,7 @@ The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender 
 SecOpsForge is developed as a technical cybersecurity portfolio project, combining practical security operations with reusable code, automated testing, and structured engineering workflows.
 
 
-**Project Status:** Final Validation — 102 Pester tests passed locally (2026-10-30); GitHub Actions validated; practical SOC verification and final documentation review remaining.
+**Project Status:** Completed — v1.0.0 released on 2026-10-30; 11 exported PowerShell commands; 102 Pester tests passed; GitHub Actions successful.
 
 ---
 
@@ -161,7 +161,9 @@ The objective was to verify that endpoint security controls could detect a known
 | Central security alert | Generated |
 | Security incident | Created |
 | Incident investigation | Completed |
-| Classification | Informational / Expected Activity |
+| Severity | Informational |
+| Defender classification | Benign Positive |
+| Remediation | Prevented |
 | Incident resolution | Completed |
 
 The investigation demonstrated a functioning detection-to-investigation workflow in the lab environment.
@@ -300,6 +302,7 @@ SecOpsForge/
 ├── .github/
 │   └── workflows/
 │       └── powershell-ci.yml
+├── assets/
 ├── config/
 ├── docs/
 ├── evidence/
@@ -314,7 +317,7 @@ SecOpsForge/
 └── README.md
 ```
 
-The repository is organized to support modular automation, test coverage, security evidence, technical documentation, and future expansion.
+The repository contains PowerShell automation, automated tests, security evidence, and technical documentation.
 
 See the current repository tree for the authoritative file inventory. Some directories are reserved for planned functionality. Detailed documentation is available under `docs/`.
 
@@ -374,21 +377,19 @@ SecOpsForge follows an eight-phase development structure with four planned relea
 | 2 | Identity security and access controls | Implemented baseline |
 | 3 | Intune device management and compliance | Implemented baseline |
 | 4 | Defender endpoint protection and detection | Implemented baseline |
-| 5 | SOC investigations and incident reporting | EICAR investigation completed; reporting development ongoing |
+| 5 | SOC investigations and incident reporting | EICAR investigation and incident reporting completed |
 | 6 | PowerShell security automation | Eleven exported commands; read-only security review and Defender device inventory implemented |
 | 7 | Automated testing and CI | 102 tests passed locally; GitHub Actions successful |
-| 8 | Documentation, final validation, and release preparation | In progress |
+| 8 | Documentation, final validation, and release preparation | Completed - v1.0.0 released |
 
-### Planned GitHub Releases
+### GitHub Releases
 
-| Release | Planned Scope |
+| Version | Status |
 |---|---|
-| v0.1.0 | Foundation, initial automation, and validated lab capabilities |
-| v0.2.0 | Expanded identity and endpoint security automation |
-| v0.3.0 | SOC investigation and security reporting enhancements |
-| v1.0.0 | Integrated, tested, and documented project release |
+| v0.1.0 | Published - initial foundation and lab capabilities |
+| v1.0.0 | Published - final integrated and validated project |
 
-Release versions represent planned milestones. No release is considered complete until its implementation and validation criteria have been met.
+The original development plan included intermediate versions v0.2.0 and v0.3.0. The scope was later consolidated, and the completed project was released as v1.0.0.
 
 ## Security Principles
 
