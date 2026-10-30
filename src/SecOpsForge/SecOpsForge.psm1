@@ -691,6 +691,68 @@ function Get-SecOpsForgeSecurityAssessment {
 }
 
 
+function Get-SecOpsForgeDefenderDeviceInventory {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$AccessToken
+    )
+
+    $uri = 'https://api.securitycenter.microsoft.com/api/machines'
+    $headers = @{
+        Authorization = "Bearer $AccessToken"
+        Accept        = 'application/json'
+    }
+
+    $devices = [System.Collections.Generic.List[object]]::new()
+
+    try {
+        while ($uri) {
+            $response = Invoke-RestMethod `
+                -Method Get `
+                -Uri $uri `
+                -Headers $headers `
+                -ErrorAction Stop
+
+            foreach ($device in @($response.value)) {
+                if ($null -eq $device) {
+                    continue
+                }
+
+                $devices.Add([PSCustomObject]@{
+                    ComputerName     = $device.computerDnsName
+                    OnboardingStatus = $device.onboardingStatus
+                    HealthStatus     = $device.healthStatus
+                    RiskScore        = $device.riskScore
+                    ExposureLevel    = $device.exposureLevel
+                    LastSeen         = $device.lastSeen
+                })
+            }
+
+            $uri = $response.'@odata.nextLink'
+
+            if ($uri -and -not $uri.StartsWith(
+                'https://api.securitycenter.microsoft.com/api/machines'
+            )) {
+                throw 'Unexpected Defender API pagination URL.'
+            }
+        }
+
+        [PSCustomObject]@{
+            GeneratedAt  = (Get-Date).ToUniversalTime().ToString('o')
+            TotalDevices = $devices.Count
+            Devices      = @($devices.ToArray())
+        }
+    }
+    catch {
+        throw "Defender device inventory failed: $($_.Exception.Message)"
+    }
+    finally {
+        $headers.Remove('Authorization')
+    }
+}
+
 Export-ModuleMember -Function `
     Get-SecOpsForgeEnvironment, `
     New-SecOpsForgeIncidentReport, `
@@ -701,5 +763,6 @@ Export-ModuleMember -Function `
     Get-SecOpsForgeIntunePolicyInventory, `
     Get-SecOpsForgeDefenderIncidentInventory, `
     New-SecOpsForgeSecurityPostureReport, `
-    Get-SecOpsForgeSecurityAssessment
+    Get-SecOpsForgeSecurityAssessment, `
+    Get-SecOpsForgeDefenderDeviceInventory
 
