@@ -52,6 +52,37 @@ Describe 'Invoke-SecOpsForgeSecurityReview' {
         $result.FindingCount | Should -Be 0
     }
 
+    It 'Reports six inventory areas with Defender data' {
+        $testToken = 'synthetic-test-token'
+
+        Mock New-SecOpsForgeSecurityPostureReport {
+            param($DefenderAccessToken)
+
+            [PSCustomObject]@{
+                SchemaVersion = '1.0'
+                ReportType = 'SecurityPosture'
+                Identity = [PSCustomObject]@{
+                    TotalUsers = 3
+                }
+                DefenderDevices = [PSCustomObject]@{
+                    TotalDevices = 1
+                    Devices = @()
+                }
+            }
+        }
+
+        $result = & $script:reviewScript -DefenderAccessToken $testToken
+
+        $result.ReviewSucceeded | Should -BeTrue
+        $result.ReportSections | Should -Be 6
+
+        Should -Invoke New-SecOpsForgeSecurityPostureReport `
+            -Times 1 `
+            -Exactly `
+            -ParameterFilter {
+                $DefenderAccessToken -eq $testToken
+            }
+    }
     It 'Exports both JSON reports' {
         & $script:reviewScript | Out-Null
 

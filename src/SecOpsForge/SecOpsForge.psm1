@@ -491,7 +491,8 @@ function Get-SecOpsForgeDefenderIncidentInventory {
 function New-SecOpsForgeSecurityPostureReport {
     [CmdletBinding()]
     param(
-        [string]$OutputPath
+        [string]$OutputPath,
+        [string]$DefenderAccessToken
     )
 
     try {
@@ -500,6 +501,12 @@ function New-SecOpsForgeSecurityPostureReport {
         $devices = Get-SecOpsForgeIntuneDeviceInventory
         $policies = Get-SecOpsForgeIntunePolicyInventory
         $incidents = Get-SecOpsForgeDefenderIncidentInventory
+
+        $defenderDevices = $null
+        if (-not [string]::IsNullOrWhiteSpace($DefenderAccessToken)) {
+            $defenderDevices = Get-SecOpsForgeDefenderDeviceInventory `
+                -AccessToken $DefenderAccessToken
+        }
 
         $report = [PSCustomObject]@{
             SchemaVersion = '1.0'
@@ -510,6 +517,11 @@ function New-SecOpsForgeSecurityPostureReport {
             IntuneDevices = $devices
             IntunePolicies = $policies
             DefenderIncidents = $incidents
+        }
+
+        if ($null -ne $defenderDevices) {
+            $report | Add-Member -NotePropertyName DefenderDevices `
+                -NotePropertyValue $defenderDevices
         }
 
         if ($OutputPath) {
@@ -765,4 +777,3 @@ Export-ModuleMember -Function `
     New-SecOpsForgeSecurityPostureReport, `
     Get-SecOpsForgeSecurityAssessment, `
     Get-SecOpsForgeDefenderDeviceInventory
-

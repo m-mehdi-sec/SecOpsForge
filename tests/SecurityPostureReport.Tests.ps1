@@ -84,3 +84,84 @@ Describe 'New-SecOpsForgeSecurityPostureReport' {
         } | Should -Throw '*No complete report was generated*'
     }
 }
+
+Describe 'Defender device integration in security posture report' {
+
+    BeforeEach {
+        Mock Get-SecOpsForgeIdentityInventory {
+            [PSCustomObject]@{ TotalUsers = 3 }
+        } -ModuleName SecOpsForge
+
+        Mock Get-SecOpsForgePrivilegedAccessInventory {
+            [PSCustomObject]@{ TotalRoleAssignments = 2 }
+        } -ModuleName SecOpsForge
+
+        Mock Get-SecOpsForgeIntuneDeviceInventory {
+            [PSCustomObject]@{ TotalManagedDevices = 1 }
+        } -ModuleName SecOpsForge
+
+        Mock Get-SecOpsForgeIntunePolicyInventory {
+            [PSCustomObject]@{ TotalPolicies = 1 }
+        } -ModuleName SecOpsForge
+
+        Mock Get-SecOpsForgeDefenderIncidentInventory {
+            [PSCustomObject]@{ TotalIncidents = 1 }
+        } -ModuleName SecOpsForge
+
+        Mock Get-SecOpsForgeDefenderDeviceInventory {
+            [PSCustomObject]@{
+                TotalDevices = 1
+                Devices = @(
+                    [PSCustomObject]@{
+                        ComputerName = 'w11-client'
+                        OnboardingStatus = 'Onboarded'
+                        HealthStatus = 'Active'
+                        ExposureLevel = 'Medium'
+                    }
+                )
+            }
+        } -ModuleName SecOpsForge
+    }
+
+    It 'Keeps five inventory sections without Defender token' {
+        $report = New-SecOpsForgeSecurityPostureReport
+
+        $report.PSObject.Properties['DefenderDevices'] |
+            Should -BeNullOrEmpty
+
+        Should -Invoke Get-SecOpsForgeDefenderDeviceInventory `
+            -ModuleName SecOpsForge -Exactly -Times 0
+    }
+
+    It 'Adds Defender devices when a token is supplied' {
+        $report = New-SecOpsForgeSecurityPostureReport `
+            -DefenderAccessToken 'mock-token'
+
+        $report.DefenderDevices.TotalDevices | Should -Be 1
+        $report.DefenderDevices.Devices[0].ComputerName |
+            Should -Be 'w11-client'
+
+        Should -Invoke Get-SecOpsForgeDefenderDeviceInventory `
+            -ModuleName SecOpsForge -Exactly -Times 1
+    }
+
+    It 'Does not include the Defender token in the report' {
+        $report = New-SecOpsForgeSecurityPostureReport `
+            -DefenderAccessToken 'mock-token'
+
+        $json = $report | ConvertTo-Json -Depth 10
+
+        $json | Should -Not -Match 'mock-token'
+    }
+
+    It 'Fails safely when Defender device inventory fails' {
+        Mock Get-SecOpsForgeDefenderDeviceInventory {
+            throw 'Simulated Defender API failure'
+        } -ModuleName SecOpsForge
+
+        {
+            New-SecOpsForgeSecurityPostureReport `
+                -DefenderAccessToken 'mock-token'
+        } | Should -Throw '*No complete report was generated*'
+    }
+}

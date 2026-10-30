@@ -56,3 +56,56 @@ Five Pester tests cover structured inventory results, empty responses, API failu
 Full project validation: 94 tests passed, 0 failed.
 
 The integration does not modify Defender settings, isolate devices, or perform automated remediation.
+
+## Defender Device Inventory Integration
+
+### Objective
+
+Integrate Microsoft Defender for Endpoint device inventory into the
+existing SecOpsForge security review and offline HTML dashboard.
+
+### Implementation
+
+- Added optional DefenderAccessToken support to the Security Posture Report.
+- Integrated Defender device inventory into the existing security review script.
+- Preserved the five original inventory sections when no token is provided.
+- Added a sixth inventory section when Defender device data is available.
+- Updated the offline HTML dashboard to display the Defender device count.
+- Kept the existing four security assessment rules unchanged.
+
+### Authentication and security
+
+- Uses a dedicated read-only Microsoft Entra application.
+- Requires the WindowsDefenderATP Machine.Read.All application permission.
+- Uses the Microsoft Defender API endpoint.
+- Client secrets and access tokens are not stored in the Git repository.
+- Private JSON and HTML reports are stored outside the repository.
+- Individual device names are not displayed in the HTML dashboard.
+- Defender exposure levels are not treated as confirmed incidents.
+
+### Validation
+
+The integration was validated against a live Microsoft Defender tenant.
+
+Results:
+
+- Security review succeeded.
+- Six inventory areas were collected.
+- One Defender device was returned.
+- Security Posture JSON export succeeded.
+- Security Assessment JSON export succeeded.
+- Offline HTML report generation succeeded.
+- Defender device inventory appeared in the HTML report.
+- Existing five-section reporting remained functional.
+- Pester test suite: 101 passed, 0 failed.
+
+### Limitations
+
+Defender device inventory is a read-only snapshot.
+
+The presence of an onboarded device does not guarantee that the
+endpoint is fully protected or free from vulnerabilities.
+
+The security assessment currently evaluates four existing rules.
+Defender device inventory is informational and does not introduce
+additional automated security findings.

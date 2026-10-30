@@ -1,6 +1,6 @@
 
 [CmdletBinding()]
-param()
+param([string]$DefenderAccessToken)
 
 $ErrorActionPreference = 'Stop'
 
@@ -34,8 +34,7 @@ $tempPosture = $null
 $tempAssessment = $null
 
 try {
-    $report = New-SecOpsForgeSecurityPostureReport -ErrorAction Stop
-
+    $report = New-SecOpsForgeSecurityPostureReport -DefenderAccessToken $DefenderAccessToken -ErrorAction Stop
     $assessment = Get-SecOpsForgeSecurityAssessment `
         -Report $report `
         -ErrorAction Stop
@@ -92,7 +91,7 @@ try {
 
     [PSCustomObject]@{
         ReviewSucceeded = $true
-        ReportSections = 5
+        ReportSections = 5 + [int]($null -ne $report.PSObject.Properties['DefenderDevices'])
         FindingCount = $assessment.FindingCount
         PostureExported = $true
         AssessmentExported = $true
