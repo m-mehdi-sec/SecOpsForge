@@ -12,7 +12,8 @@ The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender 
 
 SecOpsForge is developed as a technical cybersecurity portfolio project, combining practical security operations with reusable code, automated testing, and structured engineering workflows.
 
-**Project Status:** Active Development — 102 Pester tests passed locally (2026-10-30); GitHub Actions validated; v0.2.0 release review in progress
+
+**Project Status:** Final Validation — 102 Pester tests passed locally (2026-10-30); GitHub Actions validated; practical SOC verification and final documentation review remaining.
 
 ---
 
