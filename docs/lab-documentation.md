@@ -174,9 +174,9 @@ Policy configuration:
 - Value: Enabled.
 - Assignment: SG-SecOpsForge-Ubuntu.
 
-The device appeared in the Intune policy assignment report with status Pending.
+The device initially appeared as Pending. A subsequent Intune assignment report on November 4, 2026, showed Success: 1, Pending: 0, Error: 0, and Conflict: 0.
 
-Successful policy application has not yet been verified.
+Intune reported successful policy application. Independent local verification of the individual archive-scanning setting was not performed.
 
 ### Licensing and Limitations
 

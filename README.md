@@ -182,7 +182,7 @@ Validated results:
 - An authorized Microsoft Linux demonstration script was detected and blocked by Defender Antivirus before execution.
 - The resulting security incident was investigated, classified as expected security testing, and resolved.
 
-A dedicated Linux antivirus policy was created in Intune and assigned to the Ubuntu Server security group. Policy deployment is **pending verification**.
+A dedicated Linux antivirus policy was created in Intune and assigned to the Ubuntu Server security group. Intune reported **Success** for the Ubuntu Server policy assignment on November 4, 2026.
 
 The integration demonstrates Linux endpoint protection and SOC incident investigation. It does not establish full Intune enrollment, successful policy enforcement, or verified Linux server licensing entitlement.
 
