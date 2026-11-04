@@ -46,6 +46,26 @@ When a valid Defender access token is supplied, the security review includes Def
 
 The HTML renderer accepts `PosturePath`, `AssessmentPath`, and `OutputPath`. The Defender device inventory is informational and does not automatically generate security findings.
 
+## Linux Endpoint Security Integration
+
+Ubuntu Server 24.04 LTS runs as a separate Hyper-V endpoint alongside Windows 11.
+
+The Linux security integration follows this flow:
+
+Ubuntu Server (Hyper-V)
+  -> Microsoft Defender for Endpoint
+     -> Antivirus, real-time protection and incident investigation
+     -> Security settings management (MDE)
+  -> Microsoft Entra ID
+     -> Device object associated with MDE
+  -> Microsoft Intune
+     -> Linux antivirus policy assigned to Ubuntu security group
+     -> Policy application pending verification
+
+Ubuntu is not Entra-joined or conventionally enrolled in Intune.
+
+This integration extends the security lab without adding new PowerShell module functions or claiming that Linux inventory has been validated in the SecOpsForge HTML report.
+
 ## Trust boundaries
 
 The Microsoft tenant is a lab source. Inventory operations are read-only.

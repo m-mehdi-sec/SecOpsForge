@@ -112,6 +112,82 @@ The Security Assessment currently evaluates four existing rules.
 
 An onboarded device is not necessarily fully protected or free from vulnerabilities.
 
+## Ubuntu Server and Microsoft Defender Integration
+
+### Environment and Onboarding
+
+On November 4, 2026, Ubuntu Server 24.04 LTS running in Hyper-V was onboarded to Microsoft Defender for Endpoint using Microsoft's Linux deployment tool.
+
+Validation confirmed:
+
+- Defender agent health: Healthy.
+- Defender onboarding status: Onboarded.
+- Defender sensor status: Active.
+- Antivirus engine: Loaded successfully.
+- Real-time protection: Enabled.
+- Cloud protection: Enabled.
+- Management source: MDE.
+
+The Ubuntu server was visible in Microsoft Defender, Microsoft Entra ID, and Microsoft Intune.
+
+The Entra device object was associated with Defender security settings management. It was not Entra-joined or enrolled as a conventional Intune-managed Linux client.
+
+### Security Detection and Incident Investigation
+
+An authorized Microsoft Linux EDR demonstration package was downloaded and inspected.
+
+During extraction, Microsoft Defender Antivirus detected and prevented the demonstration script `mde_linux_edr_diy.sh`.
+
+The script was not executed, and no data exfiltration was performed.
+
+The resulting Defender incident was investigated and classified as expected security testing.
+
+Confirmed results:
+
+- Detection source: Microsoft Defender Antivirus.
+- Detection outcome: Prevented.
+- Incident ID: 2.
+- Classification: Informational, expected activity - Security testing.
+- Final incident status: Resolved.
+
+This exercise validated antivirus detection, alert investigation, classification, and incident resolution. It did not demonstrate behavioral detection of actual data exfiltration.
+
+### Microsoft Intune Security Settings Management
+
+Microsoft Defender security settings management was enabled for Linux devices.
+
+A dedicated Microsoft Entra security group was created:
+
+`SG-SecOpsForge-Ubuntu`
+
+The group contains only the Ubuntu Server device.
+
+An Intune endpoint security antivirus policy was created:
+
+`SecOpsForge-Ubuntu-Defender-AV`
+
+Policy configuration:
+
+- Platform: Linux.
+- Profile: Microsoft Defender Antivirus.
+- Setting: Enable scanning of archives.
+- Value: Enabled.
+- Assignment: SG-SecOpsForge-Ubuntu.
+
+The device appeared in the Intune policy assignment report with status Pending.
+
+Successful policy application has not yet been verified.
+
+### Licensing and Limitations
+
+The lab uses a time-limited Microsoft 365 Business Premium EEA trial.
+
+Although the Linux Defender agent reports a licensed and healthy state, this does not independently establish entitlement to Microsoft Defender protection for Linux servers.
+
+A separate Defender for Business Servers license was not verified.
+
+The Linux integration was performed as an educational security lab. It does not extend the project's PowerShell module or imply that Ubuntu device data has been validated in the SecOpsForge HTML dashboard.
+
 ## Offline HTML Reporting
 
 The HTML renderer `New-SecOpsForgeHtmlReport.ps1` reads the private Security Posture and Security Assessment JSON files.

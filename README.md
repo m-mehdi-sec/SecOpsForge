@@ -170,6 +170,24 @@ The investigation demonstrated a functioning detection-to-investigation workflow
 
 The test used the standard EICAR antivirus test file rather than real malware.
 
+## Ubuntu Server: Microsoft Defender Integration
+
+Ubuntu Server 24.04 LTS was integrated with Microsoft Defender for Endpoint in the Hyper-V security lab.
+
+Validated results:
+
+- Defender onboarding completed successfully.
+- Antivirus real-time protection and cloud protection enabled.
+- Ubuntu Server visible in Microsoft Defender, Entra ID, and Intune.
+- An authorized Microsoft Linux demonstration script was detected and blocked by Defender Antivirus before execution.
+- The resulting security incident was investigated, classified as expected security testing, and resolved.
+
+A dedicated Linux antivirus policy was created in Intune and assigned to the Ubuntu Server security group. Policy deployment is **pending verification**.
+
+The integration demonstrates Linux endpoint protection and SOC incident investigation. It does not establish full Intune enrollment, successful policy enforcement, or verified Linux server licensing entitlement.
+
+See [Lab Documentation](docs/lab-documentation.md) for implementation details, evidence, and limitations.
+
 ## PowerShell Security Automation
 
 SecOpsForge includes a reusable PowerShell module located at:
