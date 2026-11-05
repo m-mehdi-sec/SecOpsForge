@@ -68,51 +68,7 @@ This integration extends the security lab without adding new PowerShell module f
 
 ## Visual Architecture
 
-```mermaid
-flowchart TB
-    subgraph LAB["Hyper-V Lab"]
-        WIN["Windows 11 Client"]
-        UBUNTU["Ubuntu Server 24.04"]
-    end
-
-    subgraph CLOUD["Microsoft Security Services"]
-        ENTRA["Microsoft Entra ID"]
-        INTUNE["Microsoft Intune"]
-        DEFENDER["Microsoft Defender"]
-    end
-
-    subgraph SECOPS["SecOpsForge - PowerShell"]
-        INVENTORY["Read-only Security Inventory"]
-        REVIEW["Security Review"]
-        JSON["Private JSON Reports"]
-        HTML["Offline HTML Dashboard"]
-    end
-
-    WIN -->|"Entra joined"| ENTRA
-    WIN -->|"Intune managed"| INTUNE
-    WIN -->|"Endpoint protection"| DEFENDER
-
-    UBUNTU -->|"Onboarded - Real-time AV"| DEFENDER
-    DEFENDER -->|"MDE device representation"| ENTRA
-    DEFENDER -->|"Security settings management"| INTUNE
-    INTUNE -.->|"Linux AV policy - Success"| UBUNTU
-
-    ENTRA -->|"Microsoft Graph"| INVENTORY
-    INTUNE -->|"Microsoft Graph"| INVENTORY
-    DEFENDER -->|"Graph and Defender API"| INVENTORY
-
-    INVENTORY --> REVIEW
-    REVIEW --> JSON
-    JSON --> HTML
-
-    classDef endpoint fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
-    classDef cloud fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
-    classDef project fill:#dcfce7,stroke:#16a34a,color:#14532d
-
-    class WIN,UBUNTU endpoint
-    class ENTRA,INTUNE,DEFENDER cloud
-    class INVENTORY,REVIEW,JSON,HTML project
-```
+![SecOpsForge System Architecture](architecture/secopsforge-architecture.svg)
 
 ## Trust boundaries
 

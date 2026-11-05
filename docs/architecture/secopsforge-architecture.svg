@@ -1,0 +1,145 @@
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1200" height="960" viewBox="0 0 1200 960">
+
+  <defs>
+    <style>
+      text {
+        font-family: "Segoe UI", Arial, sans-serif;
+        fill: #24344d;
+      }
+      .title { font-size: 34px; font-weight: 700; }
+      .subtitle { font-size: 16px; fill: #63758d; }
+      .section { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+      .name { font-size: 18px; font-weight: 650; }
+      .detail { font-size: 13px; fill: #65758a; }
+      .edge { fill: none; stroke: #8ca2ba; stroke-width: 2.5; }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+
+    <marker id="arrow" markerWidth="9" markerHeight="9"
+            refX="7" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#8ca2ba"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="960" fill="#f7f9fc"/>
+
+  <text x="600" y="57" text-anchor="middle" class="title">
+    SecOpsForge
+  </text>
+  <text x="600" y="86" text-anchor="middle" class="subtitle">
+    Microsoft Security Operations Lab | System Architecture
+  </text>
+
+  <!-- Hyper-V Lab -->
+  <rect x="65" y="122" width="1070" height="180" rx="20"
+        fill="#edf5ff" stroke="#c8def8" stroke-width="2"/>
+  <text x="90" y="152" class="section" fill="#2563a6">
+    HYPER-V LAB
+  </text>
+
+  <rect x="145" y="176" width="405" height="92" rx="14"
+        fill="#ffffff" stroke="#c9dff5"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImIzNGU1NDFhLWYyNjctNDVhNi05Y2NlLTAyMWIxNWE4NTM2YSIgeDE9IjExLjIwMiIgeTE9IjEzLjkwNiIgeDI9IjIuODMxIiB5Mj0iLTAuNTc2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDA3OGQ0IiAvPjxzdG9wIG9mZnNldD0iMC45OTgiIHN0b3AtY29sb3I9IiM4M2I5ZjkiIC8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGcgaWQ9ImJhYzYyOTNhLWFmNjMtNGNlYS1hYzQxLTM0YWI2MWYzZmNlZiI+PHBhdGggZD0iTTEyLjU3NCw3LjAxYzAsNC4wMzYtNC45NjksNy4yODYtNi4wNDksNy45NDVhLjQuNCwwLDAsMS0uNDEyLDBDNS4wMzIsMTQuMy4wNjQsMTEuMDQ2LjA2NCw3LjAxVjIuMTUzYS4zOS4zOSwwLDAsMSwuMzg0LS4zODVDNC4zMTIsMS42NjYsMy40MjMsMCw2LjMxOSwwUzguMzI1LDEuNjY2LDEyLjE5LDEuNzY4YS4zOS4zOSwwLDAsMSwuMzg0LjM4NVoiIGZpbGw9IiM1ZWEwZWYiIC8+PHBhdGggZD0iTTEyLjA1NSw3LjA1MWMwLDMuNy00LjU1Niw2LjY4Mi01LjU0Nyw3LjI4NmEuMzY2LjM2NiwwLDAsMS0uMzc4LDBjLS45OTEtLjYtNS41NDctMy41ODQtNS41NDctNy4yODZWMi42YS4zNTcuMzU3LDAsMCwxLC4zNTItLjM1M0M0LjQ3OSwyLjE1LDMuNjYzLjYyMyw2LjMxOS42MjNTOC4xNTksMi4xNSwxMS43LDIuMjQ0YS4zNTcuMzU3LDAsMCwxLC4zNTIuMzUzWiIgZmlsbD0idXJsKCNiMzRlNTQxYS1mMjY3LTQ1YTYtOWNjZS0wMjFiMTVhODUzNmEpIiAvPjxwYXRoIGQ9Ik02LjEzLDguNjMxSDE3LjU0OGEuMzY5LjM2OSwwLDAsMSwuMzg4LjM0N3Y4LjY3NWEuMzY5LjM2OSwwLDAsMS0uMzg4LjM0N0g2LjEzYS4zNjkuMzY5LDAsMCwxLS4zODgtLjM0N1Y4Ljk3OEEuMzcuMzcsMCwwLDEsNi4xMyw4LjYzMVoiIGZpbGw9IiM4M2I5ZjkiIC8+PHBhdGggZD0iTTYuMTA4LDguNjMxSDE3LjU3MWEuMzQ4LjM0OCwwLDAsMSwuMzY1LjMyN2gwdjEuMzA3SDUuNzQyVjguOTU4YS4zNDkuMzQ5LDAsMCwxLC4zNjYtLjMyN1oiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuNyIgLz48cGF0aCBkPSJNMTYuMjc1LDEzLjY3M0g4Ljc0OWMtLjE2NywwLS4zLjA3Ni0uMy4xN3YuNDJjMCwuMDk0LjEzNi4xNy4zLjE3aDcuNTI2Yy4xNjgsMCwuMy0uMDc2LjMtLjE3di0uNDJDMTYuNTc4LDEzLjc0OSwxNi40NDMsMTMuNjczLDE2LjI3NSwxMy42NzNaIiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjciIC8+PHBhdGggZD0iTTE2LjI3NSwxMS43NTlIOC43NDljLS4xNjcsMC0uMy4wNzYtLjMuMTd2LjQyYzAsLjA5NC4xMzYuMTcuMy4xN2g3LjUyNmMuMTY4LDAsLjMtLjA3Ni4zLS4xN3YtLjQyQzE2LjU3OCwxMS44MzUsMTYuNDQzLDExLjc1OSwxNi4yNzUsMTEuNzU5WiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC43IiAvPjxwYXRoIGQ9Ik0xNi43NiwxNi4yNzJIOC43MzNjLS4xNzksMC0uMzI0LjA4Mi0uMzI0LjE4MlYxNi45YzAsLjEuMTQ1LjE4MS4zMjQuMTgxSDE2Ljc2Yy4xNzksMCwuMzI0LS4wODEuMzI0LS4xODF2LS40NDhDMTcuMDg0LDE2LjM1NCwxNi45MzksMTYuMjcyLDE2Ljc2LDE2LjI3MloiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuNyIgLz48Y2lyY2xlIGN4PSI3LjE5OCIgY3k9IjEyLjEzOSIgcj0iMC40OTgiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuNyIgLz48Y2lyY2xlIGN4PSI3LjE5OCIgY3k9IjE0LjA1MyIgcj0iMC40OTgiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuNyIgLz48Y2lyY2xlIGN4PSI3LjA3OCIgY3k9IjE2LjY3OCIgcj0iMC41MzEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuNyIgLz48L2c+PC9zdmc+" x="165" y="191"
+         width="60" height="60"/>
+  <text x="245" y="214" class="name">Windows 11 Client</text>
+  <text x="245" y="237" class="detail">
+    Entra joined | Intune managed | Defender
+  </text>
+
+  <rect x="650" y="176" width="405" height="92" rx="14"
+        fill="#ffffff" stroke="#c9dff5"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VWJ1bnR1PC90aXRsZT48cGF0aCBkPSJNMTcuNjEuNDU1YTMuNDEgMy40MSAwIDAgMC0zLjQxIDMuNDEgMy40MSAzLjQxIDAgMCAwIDMuNDEgMy40MSAzLjQxIDMuNDEgMCAwIDAgMy40MS0zLjQxIDMuNDEgMy40MSAwIDAgMC0zLjQxLTMuNDF6TTEyLjkyLjhDOC45MjMuNzc3IDUuMTM3IDIuOTQxIDMuMTQ4IDYuNDUxYTQuNSA0LjUgMCAwIDEgLjI2LS4wMDcgNC45MiA0LjkyIDAgMCAxIDIuNTg1LjczN0E4LjMxNiA4LjMxNiAwIDAgMSAxMi42ODggMy42IDQuOTQ0IDQuOTQ0IDAgMCAxIDEzLjcyMy44MzQgMTEuMDA4IDExLjAwOCAwIDAgMCAxMi45Mi44em05LjIyNiA0Ljk5NGE0LjkxNSA0LjkxNSAwIDAgMS0xLjkxOCAyLjI0NiA4LjM2IDguMzYgMCAwIDEtLjI3MyA4LjMwMyA0Ljg5IDQuODkgMCAwIDEgMS42MzIgMi41NCAxMS4xNTYgMTEuMTU2IDAgMCAwIC41NTktMTMuMDg5ek0zLjQxIDcuOTMyQTMuNDEgMy40MSAwIDAgMCAwIDExLjM0MmEzLjQxIDMuNDEgMCAwIDAgMy40MSAzLjQwOSAzLjQxIDMuNDEgMCAwIDAgMy40MS0zLjQxIDMuNDEgMy40MSAwIDAgMC0zLjQxLTMuNDF6bTIuMDI3IDcuODY2YTQuOTA4IDQuOTA4IDAgMCAxLTIuOTE1LjM1OCAxMS4xIDExLjEgMCAwIDAgNy45OTEgNi42OTggMTEuMjM0IDExLjIzNCAwIDAgMCAyLjQyMi4yNDkgNC44NzkgNC44NzkgMCAwIDEtLjk5OS0yLjg1IDguNDg0IDguNDg0IDAgMCAxLS44MzYtLjEzNiA4LjMwNCA4LjMwNCAwIDAgMS01LjY2My00LjMyem0xMS40MDUuOTI4YTMuNDEgMy40MSAwIDAgMC0zLjQxIDMuNDEgMy40MSAzLjQxIDAgMCAwIDMuNDEgMy40MSAzLjQxIDMuNDEgMCAwIDAgMy40MS0zLjQxIDMuNDEgMy40MSAwIDAgMC0zLjQxLTMuNDF6Ii8+PC9zdmc+" x="670" y="191"
+         width="60" height="60"/>
+  <text x="750" y="214" class="name">Ubuntu Server 24.04</text>
+  <text x="750" y="237" class="detail">
+    Defender onboarded | Real-time protection
+  </text>
+
+  <!-- Connections -->
+  <path class="edge" marker-end="url(#arrow)"
+        d="M347 268 V365"/>
+  <path class="edge" marker-end="url(#arrow)"
+        d="M852 268 V365"/>
+  <text x="363" y="333" class="detail">Device integration</text>
+  <text x="868" y="333" class="detail">Security management</text>
+
+  <!-- Microsoft Security Services -->
+  <rect x="65" y="365" width="1070" height="240" rx="20"
+        fill="#f2efff" stroke="#dcd2fb" stroke-width="2"/>
+  <text x="90" y="395" class="section" fill="#6544b4">
+    MICROSOFT SECURITY SERVICES
+  </text>
+
+  <rect x="100" y="430" width="305" height="125" rx="14"
+        fill="#ffffff" stroke="#ddd5f4"/>
+  <image href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0idXVpZC1mOGQ0ZDM5Mi03YzEyLTRiZDktYmFmZi02NmZiZjc4MTRiOTEiIGRhdGEtbmFtZT0iTGF5ZXIgMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAxOCAxOCI+CiAgPHBhdGggZD0ibTMuODAyLDE0LjAzMmMuMzg4LjI0MiwxLjAzMy41MTEsMS43MTUuNTExLjYyMSwwLDEuMTk4LS4xOCwxLjY3Ni0uNDg3LDAsMCwuMDAxLDAsLjAwMi0uMDAxbDEuODA1LTEuMTI4djQuMDczYy0uMjg2LDAtLjU3NC0uMDc4LS44MjQtLjIzNGwtNC4zNzQtMi43MzRaIiBmaWxsPSIjMjI1MDg2Ii8+CiAgPHBhdGggZD0ibTcuODUzLDEuNTA3TC4zNTMsOS45NjdjLS41NzkuNjU0LS40MjgsMS42NDIuMzIzLDIuMTExLDAsMCwyLjc3NiwxLjczNSwzLjEyNiwxLjk1NC4zODguMjQyLDEuMDMzLjUxMSwxLjcxNS41MTEuNjIxLDAsMS4xOTgtLjE4LDEuNjc2LS40ODcsMCwwLC4wMDEsMCwuMDAyLS4wMDFsMS44MDUtMS4xMjgtNC4zNjQtMi43MjgsNC4zNjUtNC45MjRWMXMwLDAsMCwwYy0uNDI0LDAtLjg0Ny4xNjktMS4xNDcuNTA3WiIgZmlsbD0iIzZkZiIvPgogIDxwb2x5Z29uIHBvaW50cz0iNC42MzYgMTAuMTk5IDQuNjg4IDEwLjIzMSA5IDEyLjkyNyA5LjAwMSAxMi45MjcgOS4wMDEgMTIuOTI3IDkuMDAxIDUuMjc2IDkgNS4yNzUgNC42MzYgMTAuMTk5IiBmaWxsPSIjY2JmOGZmIi8+CiAgPHBhdGggZD0ibTE3LjMyNCwxMi4wNzhjLjc1MS0uNDY5LjkwMi0xLjQ1Ny4zMjMtMi4xMTFsLTQuOTIxLTUuNTUxYy0uMzk3LS4xODUtLjg0Mi0uMjkxLTEuMzEzLS4yOTEtLjkyNSwwLTEuNzUyLjM5OS0yLjMwMiwxLjAyNmwtLjEwOS4xMjNoMHM0LjM2NCw0LjkyNCw0LjM2NCw0LjkyNGgwczAsMCwwLDBsLTQuMzY1LDIuNzI4djQuMDczYy4yODcsMCwuNTczLS4wNzguODIzLS4yMzRsNy41LTQuNjg4WiIgZmlsbD0iIzA3NDc5MyIvPgogIDxwYXRoIGQ9Im05LjAwMSwxdjQuMjc1cy4xMDktLjEyMy4xMDktLjEyM2MuNTUtLjYyNywxLjM3Ny0xLjAyNiwyLjMwMi0xLjAyNi40NzIsMCwuOTE2LjEwNywxLjMxMy4yOTFsLTIuNTc5LTIuOTA5Yy0uMjk5LS4zMzgtLjcyMy0uNTA3LTEuMTQ2LS41MDdaIiBmaWxsPSIjMDI5NGU0Ii8+CiAgPHBvbHlnb24gcG9pbnRzPSIxMy4zNjUgMTAuMTk5IDEzLjM2NSAxMC4xOTkgMTMuMzY1IDEwLjE5OSA5LjAwMSA1LjI3NiA5LjAwMSAxMi45MjYgMTMuMzY1IDEwLjE5OSIgZmlsbD0iIzk2YmNjMiIvPgo8L3N2Zz4="
+         x="122" y="450" width="65" height="65"/>
+  <text x="199" y="473" class="name">Microsoft Entra ID</text>
+  <text x="199" y="495" class="detail">Identity and device objects</text>
+  <text x="199" y="516" class="detail">Ubuntu security group</text>
+
+  <rect x="447" y="430" width="305" height="125" rx="14"
+        fill="#ffffff" stroke="#ddd5f4"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyBpZD0iYTllZDRkNDMtYzkxNi00YjlhLWI5Y2EtYmU3NmZiZGM2OTRjIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImFhZWRlMjZiLTY5OGYtNGE2NS1iNmRiLTg1OWQyMDdlMmRhNiIgeDE9IjguMDUiIHkxPSIxMS4zMiIgeDI9IjguMDUiIHkyPSIxLjI2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDA3OGQ0IiAvPjxzdG9wIG9mZnNldD0iMC44MiIgc3RvcC1jb2xvcj0iIzVlYTBlZiIgLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYmM1NDk4N2YtMzRiYS00NzAxLThjZTQtNmVjYTEwYWZmOWU5IiB4MT0iOC4wNSIgeTE9IjE1LjIxIiB4Mj0iOC4wNSIgeTI9IjExLjMyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMTQ5MGRmIiAvPjxzdG9wIG9mZnNldD0iMC45OCIgc3RvcC1jb2xvcj0iIzFmNTZhMyIgLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYTU0MzRmZDgtYzE4Yy00NzJjLWJlOTEtZjJhYTA3MDg1OGI3IiB4MT0iOC4wNSIgeTE9IjcuODciIHgyPSI4LjA1IiB5Mj0iNC45NCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2QyZWJmZiIgLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmMGZmZmQiIC8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHRpdGxlPkljb24taW50dW5lLTMyOTwvdGl0bGU+PHJlY3QgeD0iMC41IiB5PSIxLjI2IiB3aWR0aD0iMTUuMSIgaGVpZ2h0PSIxMC4wNiIgcng9IjAuNSIgZmlsbD0idXJsKCNhYWVkZTI2Yi02OThmLTRhNjUtYjZkYi04NTlkMjA3ZTJkYTYpIiAvPjxyZWN0IHg9IjEuMzQiIHk9IjIuMSIgd2lkdGg9IjEzLjQyIiBoZWlnaHQ9IjguMzkiIHJ4PSIwLjI4IiBmaWxsPSIjZmZmIiAvPjxwYXRoIGQ9Ik0xMS4wOCwxNC4zN2MtMS41LS4yMy0xLjU2LTEuMzEtMS41NS0zaC0zYzAsMS43NC0uMDYsMi44Mi0xLjU1LDNhLjg3Ljg3LDAsMCwwLS43NC44NGg3LjU0QS44OC44OCwwLDAsMCwxMS4wOCwxNC4zN1oiIGZpbGw9InVybCgjYmM1NDk4N2YtMzRiYS00NzAxLThjZTQtNmVjYTEwYWZmOWU5KSIgLz48cGF0aCBkPSJNMTcuMTcsNS45MUgxMC4yOWEyLjMxLDIuMzEsMCwxLDAsMCwuOTJIMTF2OS41OGEuMzMuMzMsMCwwLDAsLjMzLjMzaDUuODNhLjMzLjMzLDAsMCwwLC4zMy0uMzNWNi4yNEEuMzMuMzMsMCwwLDAsMTcuMTcsNS45MVoiIGZpbGw9IiMzMmJlZGQiIC8+PHJlY3QgeD0iMTEuNjIiIHk9IjYuODIiIHdpZHRoPSI1LjI3IiBoZWlnaHQ9IjguNyIgcng9IjAuMTIiIGZpbGw9IiNmZmYiIC8+PGNpcmNsZSBjeD0iOC4wNSIgY3k9IjYuNDEiIHI9IjEuNDYiIG9wYWNpdHk9IjAuOSIgZmlsbD0idXJsKCNhNTQzNGZkOC1jMThjLTQ3MmMtYmU5MS1mMmFhMDcwODU4YjcpIiAvPjxwYXRoIGQ9Ik0xNC44OCwxMC44MiwxMy43Niw5LjdhLjA2LjA2LDAsMCwwLS4xLjA1di42OGEuMDYuMDYsMCwwLDEtLjA2LjA2SDExdi44M0gxMy42YS4wNi4wNiwwLDAsMSwuMDYuMDZ2LjY5YS4wNi4wNiwwLDAsMCwuMSwwTDE0Ljg4LDExQS4xMi4xMiwwLDAsMCwxNC44OCwxMC44MloiIGZpbGw9IiMwMDc4ZDQiIC8+PC9zdmc+"
+         x="469" y="450" width="65" height="65"/>
+  <text x="546" y="473" class="name">Microsoft Intune</text>
+  <text x="546" y="495" class="detail">Endpoint security policy</text>
+  <text x="546" y="516" class="detail">Linux AV policy: Success</text>
+
+  <rect x="794" y="430" width="305" height="125" rx="14"
+        fill="#ffffff" stroke="#ddd5f4"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgRnJlZSA2LjcuMiBieSBAZm9udGF3ZXNvbWUgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbSBMaWNlbnNlIC0gaHR0cHM6Ly9mb250YXdlc29tZS5jb20vbGljZW5zZS9mcmVlIChJY29uczogQ0MgQlkgNC4wLCBGb250czogU0lMIE9GTCAxLjEsIENvZGU6IE1JVCBMaWNlbnNlKSBDb3B5cmlnaHQgMjAyNCBGb250aWNvbnMsIEluYy4gLS0+PHBhdGggZD0iTTI1NiAwYzQuNiAwIDkuMiAxIDEzLjQgMi45TDQ1Ny43IDgyLjhjMjIgOS4zIDM4LjQgMzEgMzguMyA1Ny4yYy0uNSA5OS4yLTQxLjMgMjgwLjctMjEzLjYgMzYzLjJjLTE2LjcgOC0zNi4xIDgtNTIuOCAwQzU3LjMgNDIwLjcgMTYuNSAyMzkuMiAxNiAxNDBjLS4xLTI2LjIgMTYuMy00Ny45IDM4LjMtNTcuMkwyNDIuNyAyLjlDMjQ2LjggMSAyNTEuNCAwIDI1NiAwem0wIDY2LjhsMCAzNzguMUMzOTQgMzc4IDQzMS4xIDIzMC4xIDQzMiAxNDEuNEwyNTYgNjYuOHMwIDAgMCAweiIvPjwvc3ZnPg=="
+         x="816" y="450" width="65" height="65"/>
+  <text x="893" y="473" class="name">Microsoft Defender</text>
+  <text x="893" y="495" class="detail">Endpoint protection</text>
+  <text x="893" y="516" class="detail">Detection and incidents</text>
+
+  <!-- Read-only data collection -->
+  <path class="edge" d="M252 555 V635 H600"/>
+  <path class="edge" d="M600 555 V635"/>
+  <path class="edge" d="M947 555 V635 H600"/>
+  <path class="edge" marker-end="url(#arrow)"
+        d="M600 635 V687"/>
+  <text x="618" y="656" class="detail">
+    Read-only API collection
+  </text>
+
+  <!-- SecOpsForge -->
+  <rect x="65" y="687" width="1070" height="198" rx="20"
+        fill="#eaf7f0" stroke="#c4e7d0" stroke-width="2"/>
+  <text x="90" y="717" class="section" fill="#237b50">
+    SECOPSFORGE | POWERSHELL
+  </text>
+
+  <rect x="105" y="746" width="305" height="104" rx="14"
+        fill="#ffffff" stroke="#c8e8d4"/>
+  <image href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEyNGY5OTgzLTkxMWYtNGRmNy05MjBmLWY5NjRjOGMxMGY4MiIgeDE9IjkiIHkxPSIxNS44MzQiIHgyPSI5IiB5Mj0iNS43ODgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMzMmJlZGQiIC8+PHN0b3Agb2Zmc2V0PSIwLjE3NSIgc3RvcC1jb2xvcj0iIzMyY2FlYSIgLz48c3RvcCBvZmZzZXQ9IjAuNDEiIHN0b3AtY29sb3I9IiMzMmQyZjIiIC8+PHN0b3Agb2Zmc2V0PSIwLjc3NSIgc3RvcC1jb2xvcj0iIzMyZDRmNSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48dGl0bGU+TXNQb3J0YWxGeC5iYXNlLmltYWdlcy0xMDwvdGl0bGU+PGcgaWQ9ImE3ZWYwNDgyLTcxZjItNGI3ZS1iOTE2LWIxYzc1NDI0NWJmMSI+PGc+PHBhdGggZD0iTS41LDUuNzg4aDE3YTAsMCwwLDAsMSwwLDB2OS40NzhhLjU2OC41NjgsMCwwLDEtLjU2OC41NjhIMS4wNjhBLjU2OC41NjgsMCwwLDEsLjUsMTUuMjY2VjUuNzg4QTAsMCwwLDAsMSwuNSw1Ljc4OFoiIGZpbGw9InVybCgjYTI0Zjk5ODMtOTExZi00ZGY3LTkyMGYtZjk2NGM4YzEwZjgyKSIgLz48cGF0aCBkPSJNMS4wNzEsMi4xNjZIMTYuOTI5YS41NjguNTY4LDAsMCwxLC41NjguNTY4VjUuNzg4YTAsMCwwLDAsMSwwLDBILjVhMCwwLDAsMCwxLDAsMFYyLjczNEEuNTY4LjU2OCwwLDAsMSwxLjA3MSwyLjE2NloiIGZpbGw9IiMwMDc4ZDQiIC8+PHBhdGggZD0iTTQuMjkyLDcuMTUzaC41MjNhLjE2Ny4xNjcsMCwwLDEsLjE2Ny4xNjd2My44NThhLjMzNS4zMzUsMCwwLDEtLjMzNS4zMzVINC4xMjVhMCwwLDAsMCwxLDAsMFY3LjMyMWEuMTY3LjE2NywwLDAsMSwuMTY3LS4xNjdaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNS4yNzEgNS45NjcpIHJvdGF0ZSgtNDUuMDgxKSIgZmlsbD0iI2YyZjJmMiIgLz48cGF0aCBkPSJNNC4zMiw5LjY0N2guNTIzYS4xNjcuMTY3LDAsMCwxLC4xNjcuMTY3djQuMTMxYTAsMCwwLDAsMSwwLDBINC40ODhhLjMzNS4zMzUsMCwwLDEtLjMzNS0uMzM1di0zLjhhLjE2Ny4xNjcsMCwwLDEsLjE2Ny0uMTY3WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTAuNTA0IDIzLjM4NSkgcm90YXRlKC0xMzUuMDgxKSIgZmlsbD0iI2U2ZTZlNiIgLz48cmVjdCB4PSI3LjIyMSIgeT0iMTIuNjQiIHdpZHRoPSI0Ljc3MSIgaGVpZ2h0PSIxLjAxMSIgcng9IjAuMjkxIiBmaWxsPSIjZjJmMmYyIiAvPjwvZz48L2c+PC9zdmc+"
+         x="122" y="766" width="57" height="57"/>
+  <text x="190" y="780" class="name">Security Inventory</text>
+  <text x="190" y="802" class="detail">Microsoft Graph / Defender API</text>
+  <text x="190" y="824" class="detail">Read-only assessment</text>
+
+  <rect x="448" y="746" width="305" height="104" rx="14"
+        fill="#ffffff" stroke="#c8e8d4"/>
+  <text x="471" y="780" class="name">Private JSON Reports</text>
+  <text x="471" y="804" class="detail">Inventory and findings</text>
+  <text x="471" y="826" class="detail">Stored outside Git repository</text>
+
+  <rect x="791" y="746" width="305" height="104" rx="14"
+        fill="#ffffff" stroke="#c8e8d4"/>
+  <text x="814" y="780" class="name">Offline HTML Dashboard</text>
+  <text x="814" y="804" class="detail">Security posture overview</text>
+  <text x="814" y="826" class="detail">Local report visualization</text>
+
+  <path class="edge" marker-end="url(#arrow)"
+        d="M410 798 H442"/>
+  <path class="edge" marker-end="url(#arrow)"
+        d="M753 798 H785"/>
+
+  <text x="600" y="922" text-anchor="middle" class="detail">
+    Architecture overview | SecOpsForge v1.0.0
+  </text>
+</svg>
