@@ -3,7 +3,7 @@
 
 ## Purpose
 
-SecOpsForge is a defensive Microsoft security operations research lab and PowerShell reporting project. It combines a Microsoft 365 Business Premium lab tenant, Entra ID, Intune, Defender for Business, a Windows 11 Hyper-V lab endpoint, PowerShell 7, Pester, and GitHub Actions.
+SecOpsForge is a defensive Microsoft security operations research lab and PowerShell reporting project. It combines a Microsoft 365 Business Premium lab tenant, Entra ID, Intune, Defender for Business, Windows 11 and Ubuntu Server 24.04 LTS Hyper-V lab endpoints, PowerShell 7, Pester, and GitHub Actions.
 
 ## Data flow
 
@@ -60,11 +60,11 @@ Ubuntu Server (Hyper-V)
      -> Device object associated with MDE
   -> Microsoft Intune
      -> Linux antivirus policy assigned to Ubuntu security group
-     -> Intune policy assignment: Success
+     -> Intune assignment report: Success (on-device setting not independently verified)
 
 Ubuntu is not Entra-joined or conventionally enrolled in Intune.
 
-This integration extends the security lab without adding new PowerShell module functions or claiming that Linux inventory has been validated in the SecOpsForge HTML report.
+This November 4, 2026 integration extends the security lab after the v1.0.0 release without adding new PowerShell module functions or claiming that Linux inventory has been validated in the SecOpsForge HTML report.
 
 ## Visual Architecture
 

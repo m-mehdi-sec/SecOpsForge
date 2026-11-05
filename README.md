@@ -8,7 +8,7 @@
 
 SecOpsForge is a hands-on Microsoft security operations research lab focused on identity protection, endpoint security, threat detection, incident investigation, and security automation.
 
-The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender for Business, Windows 11, PowerShell, and GitHub Actions in a controlled security testing environment.
+The project integrates Microsoft Entra ID, Microsoft Intune, Microsoft Defender for Business, Microsoft Defender for Endpoint on Ubuntu Server, Windows 11, PowerShell, and GitHub Actions in a controlled security testing environment.
 
 SecOpsForge is developed as a technical cybersecurity portfolio project, combining practical security operations with reusable code, automated testing, and structured engineering workflows.
 
@@ -43,8 +43,10 @@ SecOpsForge uses a Microsoft 365 Business Premium lab tenant integrated with an 
 |---|---|
 | Microsoft Entra ID | Identity management, authentication, authorization, and Conditional Access |
 | Microsoft Intune | Endpoint enrollment, device compliance, and security configuration |
-| Microsoft Defender for Business | Endpoint detection, protection, security alerts, and incident investigation |
-| Windows 11 | Managed endpoint used for authorized security testing |
+| Microsoft Defender for Business | Windows endpoint protection, security alerts, and incident investigation |
+| Microsoft Defender for Endpoint (Linux) | Ubuntu Server antivirus protection and security settings management |
+| Windows 11 | Entra-joined, Intune-enrolled endpoint used for authorized security testing |
+| Ubuntu Server 24.04 LTS | Defender-onboarded Linux server; not conventionally Intune-enrolled |
 | Hyper-V | Virtualization platform hosting the lab endpoint |
 | PowerShell 7 | Security operations scripting and automation |
 | Pester 6 | Automated PowerShell testing |
@@ -66,7 +68,8 @@ Microsoft 365 Security Lab
 │   ├── Windows Device Enrollment
 │   ├── Device Compliance Policies
 │   ├── Endpoint Security Policies
-│   └── Defender Integration
+│   ├── Defender Integration
+│   └── Linux Antivirus Policy (MDE Security Settings Management)
 │
 ├── Microsoft Defender for Business
 │   ├── Endpoint Protection
@@ -75,15 +78,24 @@ Microsoft 365 Security Lab
 │   ├── Incident Investigation
 │   └── Vulnerability Management
 │
+├── Microsoft Defender for Endpoint (Linux)
+│   ├── Ubuntu Server Onboarding
+│   ├── Antivirus Detection and Prevention
+│   └── Security Settings Management via MDE
+│
 └── Hyper-V Lab Environment
-    └── W11-CLIENT
-        ├── Microsoft Entra Joined
-        ├── Intune Enrolled
-        ├── Device Compliant
-        └── Defender Onboarded
+    ├── W11-CLIENT
+    │   ├── Microsoft Entra Joined
+    │   ├── Intune Enrolled
+    │   ├── Device Compliant
+    │   └── Defender Onboarded
+    └── Ubuntu Server 24.04 LTS
+        ├── Defender for Endpoint Onboarded
+        ├── MDE Security Settings Management
+        └── Not Entra Joined or Conventionally Intune Enrolled
 ```
 
-The Windows 11 endpoint is managed through Microsoft Intune and onboarded to Microsoft Defender for Business.
+The Windows 11 endpoint is managed through Microsoft Intune and onboarded to Microsoft Defender for Business. Ubuntu Server is onboarded to Microsoft Defender for Endpoint and uses MDE security settings management; it is not conventionally enrolled in Intune. The Linux antivirus policy was reported successful in Intune, but its individual setting was not independently verified on the server.
 
 Conditional Access policies are currently configured in report-only mode for evaluation and validation. Microsoft Entra Security Defaults remain enabled.
 
@@ -184,7 +196,7 @@ Validated results:
 
 A dedicated Linux antivirus policy was created in Intune and assigned to the Ubuntu Server security group. Intune reported **Success** for the Ubuntu Server policy assignment on November 4, 2026.
 
-The integration demonstrates Linux endpoint protection and SOC incident investigation. It does not establish full Intune enrollment, successful policy enforcement, or verified Linux server licensing entitlement.
+The integration demonstrates Linux endpoint protection and SOC incident investigation. It does not establish conventional Intune enrollment, independently verified enforcement of the individual policy setting, or verified Linux server licensing entitlement.
 
 See [Lab Documentation](docs/lab-documentation.md) for implementation details, evidence, and limitations.
 
@@ -317,27 +329,29 @@ create security findings.
 
 ```text
 SecOpsForge/
-├── .github/
-│   └── workflows/
-│       └── powershell-ci.yml
-├── assets/
-├── config/
+├── .github/workflows/powershell-ci.yml
+├── .gitignore
+├── LICENSE
+├── README.md
+├── assets/linkedin.svg
 ├── docs/
-├── evidence/
-├── samples/
-│   └── eicar-incident.json
+│   ├── architecture.md
+│   ├── architecture/
+│   │   ├── icons/                    # Reviewed SVG assets
+│   │   ├── secopsforge-architecture.mmd
+│   │   └── secopsforge-architecture.svg
+│   ├── lab-documentation.md
+│   ├── security-model.md
+│   └── testing.md
+├── samples/eicar-incident.json
 ├── scripts/
-├── src/
-│   └── SecOpsForge/
-│       └── SecOpsForge.psm1
-├── tests/
-│   └── *.Tests.ps1
-└── README.md
+│   ├── Invoke-SecOpsForgeSecurityReview.ps1
+│   └── New-SecOpsForgeHtmlReport.ps1
+├── src/SecOpsForge/SecOpsForge.psm1
+└── tests/                          # 16 Pester test files
 ```
 
-The repository contains PowerShell automation, automated tests, security evidence, and technical documentation.
-
-See the current repository tree for the authoritative file inventory. Some directories are reserved for planned functionality. Detailed documentation is available under `docs/`.
+The repository contains PowerShell automation, automated tests, a sanitized sample, architecture assets, and technical documentation. Private tenant evidence and generated reports are deliberately excluded. Detailed documentation is available under `docs/`.
 
 ## Automated Testing
 
@@ -430,8 +444,8 @@ SecOpsForge follows defensive security engineering principles.
 |---|---|
 | Identity and Access | Microsoft Entra ID, MFA, Conditional Access |
 | Endpoint Management | Microsoft Intune |
-| Endpoint Security | Microsoft Defender for Business |
-| Operating System | Windows 11 |
+| Endpoint Security | Microsoft Defender for Business (Windows), Microsoft Defender for Endpoint (Ubuntu Server) |
+| Operating Systems | Windows 11, Ubuntu Server 24.04 LTS |
 | Virtualization | Hyper-V |
 | Automation | PowerShell 7 |
 | Data Format | JSON |
@@ -439,24 +453,11 @@ SecOpsForge follows defensive security engineering principles.
 | Version Control | Git, GitHub |
 | Continuous Integration | GitHub Actions |
 
-## Potential Future Improvements
+## Project Scope and Completion
 
-The following capabilities are being considered for future development:
+SecOpsForge v1.0.0 is the completed educational PowerShell security operations project. The original v1.0.0 release was published on October 30, 2026. Subsequent lab documentation records the November 4 Ubuntu Server integration; this does not change the historical scope or contents of the v1.0.0 release tag.
 
-- Extend existing read-only Microsoft Graph inventory coverage where authorized.
-- Expand existing read-only Defender incident inventory and investigation workflows.
-- Extended endpoint security posture assessment.
-- Structured incident investigation reports.
-- Reusable security operations scripts and runbooks.
-- Additional input validation and error handling.
-- Expanded automated test coverage.
-- Improved CI validation and code quality checks.
-- Secure configuration management.
-- Additional defensive detection and investigation workflows.
-
-Future capabilities will be implemented incrementally and validated before being described as completed functionality.
-
-SecOpsForge is an independent cybersecurity learning and research project, not a production-certified SOC platform.
+The project does not provide continuous monitoring, automatic remediation, comprehensive vulnerability coverage, or production-certified SOC functionality. No additional features are currently planned for this completed repository.
 
 ## Author
 

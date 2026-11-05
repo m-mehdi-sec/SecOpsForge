@@ -17,7 +17,7 @@ Environment prerequisites; Graph connection; identity and privileged-access inve
 The offline HTML report was validated using private JSON files and live Microsoft Defender inventory data. Both five-area and six-area reporting were tested. The six-area report displayed one Defender device without exposing its name in the HTML output. Entra ID and Intune logos rendered. Automated SVG tests cover allowed local gradient references and rejection of unsafe constructs. These tests do not replace a security review of any future third-party SVG asset.
 
 ## CI
-The existing GitHub Actions workflow `.github/workflows/powershell-ci.yml` runs Pester on pushes, pull requests, and manual dispatches as described in the README. GitHub Actions completed successfully after the Defender integration and subsequent README update (commit `0fd2270`).
+The existing GitHub Actions workflow `.github/workflows/powershell-ci.yml` runs Pester on pushes, pull requests, and manual dispatches as described in the README. GitHub Actions completed successfully after subsequent documentation changes, including the visual architecture update (`9d507d0`), as confirmed on November 5, 2026.
 
 ## Release gate
 1. Run the full local Pester suite.

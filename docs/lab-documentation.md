@@ -8,6 +8,7 @@
 - Microsoft Intune for managed endpoint and policy evaluation.
 - Microsoft Defender for Business for endpoint protection and incident investigation.
 - Windows 11 lab endpoint hosted on Hyper-V.
+- Ubuntu Server 24.04 LTS onboarded to Microsoft Defender for Endpoint, with security settings management via MDE.
 - PowerShell 7, Pester, and GitHub Actions for automation and validation.
 
 ## Validated Activities
@@ -176,7 +177,7 @@ Policy configuration:
 
 The device initially appeared as Pending. A subsequent Intune assignment report on November 4, 2026, showed Success: 1, Pending: 0, Error: 0, and Conflict: 0.
 
-Intune reported successful policy application. Independent local verification of the individual archive-scanning setting was not performed.
+Intune reported Success for the policy assignment. Independent local verification of the individual archive-scanning setting was not performed; the report alone does not prove on-device enforcement.
 
 ### Licensing and Limitations
 
